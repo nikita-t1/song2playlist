@@ -10,6 +10,10 @@ module.exports = {
         'node_modules/preline/dist/*.js',
     ],
     theme: {
+        colors: {
+            'spotify-green': '#1db954',
+            'spotify-black': '#191414',
+        },
         extend: {},
     },
     plugins: [
