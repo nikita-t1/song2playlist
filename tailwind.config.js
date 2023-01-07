@@ -7,9 +7,12 @@ module.exports = {
         "./plugins/**/*.{js,ts}",
         "./nuxt.config.{js,ts}",
         "./app.vue",
+        'node_modules/preline/dist/*.js',
     ],
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        require('preline/plugin'),
+    ],
 }
