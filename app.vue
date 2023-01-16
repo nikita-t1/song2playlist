@@ -1,5 +1,6 @@
 <template>
   <div>
-    <NuxtWelcome />
+      <NuxtPage :key="$route.fullPath"/>
   </div>
 </template>
+
