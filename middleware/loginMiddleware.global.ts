@@ -1,9 +1,10 @@
 import {getUserProfile} from "~/api/getUserProfile";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+    console.log(from.path)
 
     // if you are coming from the '/login' page, no evaluation is needed and the function returns here
-    if (from.path == '/login') {
+    if (from.path == '/login' || from.path == '/callback/') {
         return
     }
 
