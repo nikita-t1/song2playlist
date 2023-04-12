@@ -57,11 +57,17 @@ let durationMs = ref(0)
 
 const data = ref({})
 
-fetchData();
+let interval = 0;
+onMounted(() => {
+    interval = window.setInterval(function () {
+        fetchData();
+    }, 3000)
+})
 
-setInterval(function () {
-    fetchData();
-}, 3000)
+onUnmounted(() => {
+    clearInterval(interval)
+})
+
 
 function fetchData() {
     getPlaybackState().then(res => {
@@ -74,7 +80,7 @@ function fetchData() {
         playbackPercent.value = progressMs.value / durationMs.value * 100
         deviceId.value = res.data.device.id
     }).catch(error => {
-        // console.log(error)
+        console.log(error)
     });
 }
 

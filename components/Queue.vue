@@ -26,12 +26,18 @@ import {getQueue, postNextTrack} from "~/api/SpotifyAPI";
 
 let queue = ref({})
 
+let interval = 0;
+onMounted(() => {
+    interval = window.setInterval(function () {
+        getQueue().then(res => {
+            queue.value = res
+        });
+    }, 5000)
+})
+onUnmounted(() => {
+    clearInterval(interval)
+})
 
-setInterval(function () {
-    getQueue().then(res => {
-        queue.value = res
-    });
-}, 5000)
 
 async function playQueuePos(index: number) {
     for (let i = 0; i < index; i++) {
