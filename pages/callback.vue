@@ -16,27 +16,33 @@ import {spotifyTokenValidity} from "~/composable/spotifyTokenValidity";
 import {spotifyRefreshToken} from "~/composable/spotifyRefreshToken";
 import {spotifyUserProfile} from "~/composable/spotifyUserProfile";
 import {getUserProfile} from "~/api/SpotifyAPI";
+import axios from "axios";
 
 const authCode = useRoute().query.code
 const state = useRoute().query.state
 const error = useRoute().query.error
 
-onMounted(async () => {
+onMounted(() => {
     if (error == null) {
-        const spotifyResponse = await $fetch.raw("/api/callback", {
-            query: {
+        axios.get("/api/callback", {
+            params: {
                 authCode: authCode,
                 state: state,
             }
+        }).then(async spotifyResponse => {
+            spotifyToken().value = spotifyResponse.data.access_token
+            spotifyRefreshToken().value = spotifyResponse.data.refresh_token
+            spotifyTokenValidity().value = Date.now() + (spotifyResponse.data.expires_in * 1000)
+            spotifyUserProfile().value = (await getUserProfile()).data
+            navigateTo({path: "/"});
+        }).catch(e => {
+            alert(e)
+            console.log(e)
+            navigateTo({ path: "/login" });
         })
-        spotifyToken().value = spotifyResponse._data.access_token
-        spotifyRefreshToken().value = spotifyResponse._data.refresh_token
-        spotifyTokenValidity().value = Date.now() + (spotifyResponse._data.expires_in * 1000)
-        spotifyUserProfile().value = (await getUserProfile()).data
-        navigateTo({ path: "/" });
 
     } else {
-        console.log("error")
+        console.log(error)
     }
 
 })
