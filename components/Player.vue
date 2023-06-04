@@ -16,7 +16,7 @@
             <button class="grow text-white cursor-auto" type="button">
                     <span
                         class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"
-                        @click="postPreviousTrack">
+                        @click="SpotifyAPI.postPreviousTrack">
                         <Icon name="bi:skip-start-fill" size="20"/>
                     </span>
             </button>
@@ -31,7 +31,7 @@
             <button class="grow text-white cursor-auto" type="button">
                     <span
                         class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"
-                        @click="postNextTrack">
+                        @click="SpotifyAPI.postNextTrack">
                         <Icon name="bi:skip-end-fill" size="20"/>
                     </span>
             </button>
@@ -43,7 +43,7 @@
 
 import {useMouseInElement} from "@vueuse/core";
 import {spotifyPlaybackState} from "~/composable/spotifyPlaybackState";
-import {getPlaybackState, putPausePlayback, putResumePlayback, putSeekPosition, postNextTrack, postPreviousTrack} from "~/api/SpotifyAPI";
+import SpotifyAPI from "~/api/SpotifyAPI";
 
 const progressBar = ref(null)
 const {x, elementX, elementWidth} = useMouseInElement(progressBar)
@@ -70,7 +70,7 @@ onUnmounted(() => {
 
 
 function fetchData() {
-    getPlaybackState().then(res => {
+    SpotifyAPI.getPlaybackState().then(res => {
         data.value = res.data.item
         spotifyPlaybackState().value = res.data.item
         artists.value = res.data.item.artists.map((artist: any) => artist.name).join(', ')
@@ -88,15 +88,15 @@ function fetchData() {
 function seekToPosition() {
     const requestedPercent = (elementX.value / elementWidth.value)
     const requestedPosition = Math.round(durationMs.value * requestedPercent)
-    putSeekPosition(requestedPosition)
+    SpotifyAPI.putSeekPosition(requestedPosition)
 }
 
 
 function togglePause() {
     if (isPlaying.value) {
-        putPausePlayback()
+        SpotifyAPI.putPausePlayback()
     } else {
-        putResumePlayback(deviceId.value)
+        SpotifyAPI.putResumePlayback(deviceId.value)
     }
 }
 </script>

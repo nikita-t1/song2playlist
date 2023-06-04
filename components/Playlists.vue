@@ -55,7 +55,7 @@ import {spotifyUserProfile} from "~/composable/spotifyUserProfile";
 
 import {onBeforeMount} from "@vue/runtime-core";
 import {Playlist, Track} from "spotify-types";
-import {getAllUserPlaylists, postPlaylistItem, deletePlaylistItem, getPlaylistTracks} from "~/api/SpotifyAPI";
+import SpotifyAPI from "~/api/SpotifyAPI";
 
 const playlists: Ref<any[]> = ref([])
 const playbackState: Ref<Track> = spotifyPlaybackState()
@@ -67,7 +67,11 @@ onBeforeMount(() => {
 })
 
 function loadAllUserPlaylists(){
-    getAllUserPlaylists(spotifyUserProfile().value.id).then(async (playlists: Playlist[]) => {
+    SpotifyAPI.getAllUserPlaylists().then(async (playlists: Playlist[]) => {
+
+        // show only user playlists
+        playlists = playlists.filter((value: any) => value.owner.id == spotifyUserProfile().value.id)
+
         mapPlaylistImages(playlists)
         expectedPlaylistsSize.value = playlists.length
         for (const playlist of playlists) {
@@ -82,7 +86,7 @@ function loadAllUserPlaylists(){
 function addTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
     const spotify_uris: any[] = [playbackState.value.uri].flat()
-    postPlaylistItem(playlist_id, spotify_uris).then(() => {
+    SpotifyAPI.postPlaylistItem(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
 }
@@ -90,13 +94,13 @@ function addTrackToPlaylist(playlist: any){
 function removeTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
     const spotify_uris: any[] = [playbackState.value.uri].flat()
-    deletePlaylistItem(playlist_id, spotify_uris).then(() => {
+    SpotifyAPI.deletePlaylistItem(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
 }
 
 function isCurrentTrackInPlaylist(playlist: any) {
-    return playlist.allTracks.some((it: any) => it.track?.id == spotifyPlaybackState().value.id)
+    return playlist.allTracks.data.items.some((it: any) => it.track?.id == spotifyPlaybackState().value.id)
 }
 
 
@@ -110,7 +114,7 @@ function mapPlaylistImages(pl: any[]) {
 }
 
 async function loadPlaylistTracks(playlist: any) { //PlaylistObjectFull
-    playlist.allTracks = await getPlaylistTracks(playlist.tracks.href);
+    playlist.allTracks = await SpotifyAPI.getPlaylistTracks(playlist.tracks.href);
     console.log(playlist.allTracks)
 }
 

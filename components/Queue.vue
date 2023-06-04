@@ -22,16 +22,23 @@
 <script lang="ts" setup>
 
 import {sleep} from "~/composable/sleep";
-import {getQueue, postNextTrack} from "~/api/SpotifyAPI";
+import SpotifyAPI from "~/api/SpotifyAPI";
 
 let queue = ref({})
 
 let interval = 0;
 onMounted(() => {
     interval = window.setInterval(function () {
-        getQueue().then(res => {
-            queue.value = res
+        SpotifyAPI.getQueue().then(res => {
+            // map the queue to a more readable format
+            console.log(res.data.queue)
+            const q = res.data.queue.map((item: any) => [item.name, item.artists.map((artist: any) => artist.name).join(', '), item.album.images[0].url])
+            queue.value = q
+        }).catch(err => {
+            console.log(err)
+            queue.value = {}
         });
+
     }, 5000)
 })
 onUnmounted(() => {
@@ -41,7 +48,7 @@ onUnmounted(() => {
 
 async function playQueuePos(index: number) {
     for (let i = 0; i < index; i++) {
-        postNextTrack()
+        await SpotifyAPI.postNextTrack()
         await sleep(300)
     }
 }

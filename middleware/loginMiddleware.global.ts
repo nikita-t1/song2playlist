@@ -1,4 +1,4 @@
-import {getUserProfile} from "~/api/getUserProfile";
+import SpotifyAPI from "~/api/SpotifyAPI";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     console.log(from.path)
@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
 
     try {
-        await getUserProfile() // <-- will throw a 400 status code if the token is invalid or doesn't exist
+        await SpotifyAPI.getUserProfile() // <-- will throw a 400 status code if the token is invalid or doesn't exist
         return navigateTo(to)
     } catch (e) {
         // redirect to '/login'
