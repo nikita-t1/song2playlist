@@ -15,8 +15,8 @@ import {spotifyToken} from "~/composable/spotifyToken";
 import {spotifyTokenValidity} from "~/composable/spotifyTokenValidity";
 import {spotifyRefreshToken} from "~/composable/spotifyRefreshToken";
 import {spotifyUserProfile} from "~/composable/spotifyUserProfile";
-import SpotifyAPI from "~/api/SpotifyAPI";
 import axios from "axios";
+import useSpotifyAPI from "~/api/SpotifyAPI";
 
 const authCode = useRoute().query.code
 const state = useRoute().query.state
@@ -33,7 +33,9 @@ onMounted(() => {
             spotifyToken().value = spotifyResponse.data.access_token
             spotifyRefreshToken().value = spotifyResponse.data.refresh_token
             spotifyTokenValidity().value = Date.now() + (spotifyResponse.data.expires_in * 1000)
-            spotifyUserProfile().value = (await SpotifyAPI.getUserProfile()).data
+            const api = useSpotifyAPI(spotifyToken().value)
+            console.log(api)
+            spotifyUserProfile().value = (await api.getUserProfile()).data
             navigateTo({path: "/"});
         }).catch(e => {
             alert(e)

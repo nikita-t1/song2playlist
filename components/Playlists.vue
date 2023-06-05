@@ -55,7 +55,10 @@ import {spotifyUserProfile} from "~/composable/spotifyUserProfile";
 
 import {onBeforeMount} from "@vue/runtime-core";
 import {Playlist, Track} from "spotify-types";
-import SpotifyAPI from "~/api/SpotifyAPI";
+import {spotifyToken} from "~/composable/spotifyToken";
+import useSpotifyAPI from "~/api/SpotifyAPI";
+
+const api = useSpotifyAPI(spotifyToken().value)
 
 const playlists: Ref<any[]> = ref([])
 const playbackState: Ref<Track> = spotifyPlaybackState()
@@ -67,7 +70,7 @@ onBeforeMount(() => {
 })
 
 function loadAllUserPlaylists(){
-    SpotifyAPI.getAllUserPlaylists().then(async (playlists: Playlist[]) => {
+    api.getAllUserPlaylists().then(async (playlists: Playlist[]) => {
 
         // show only user playlists
         playlists = playlists.filter((value: any) => value.owner.id == spotifyUserProfile().value.id)
@@ -86,7 +89,7 @@ function loadAllUserPlaylists(){
 function addTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
     const spotify_uris: any[] = [playbackState.value.uri].flat()
-    SpotifyAPI.postPlaylistItem(playlist_id, spotify_uris).then(() => {
+    api.addTrackToPlaylist(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
 }
@@ -94,13 +97,14 @@ function addTrackToPlaylist(playlist: any){
 function removeTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
     const spotify_uris: any[] = [playbackState.value.uri].flat()
-    SpotifyAPI.deletePlaylistItem(playlist_id, spotify_uris).then(() => {
+    api.deletePlaylistItem(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
 }
 
 function isCurrentTrackInPlaylist(playlist: any) {
-    return playlist.allTracks.data.items.some((it: any) => it.track?.id == spotifyPlaybackState().value.id)
+    console.log(playlist.allTracks)
+    return playlist.allTracks.some((it: any) => it.track?.id == spotifyPlaybackState().value.id)
 }
 
 
@@ -114,7 +118,7 @@ function mapPlaylistImages(pl: any[]) {
 }
 
 async function loadPlaylistTracks(playlist: any) { //PlaylistObjectFull
-    playlist.allTracks = await SpotifyAPI.getPlaylistTracks(playlist.tracks.href);
+    playlist.allTracks = await api.getAllPlaylistTracks(playlist.tracks.href);
     console.log(playlist.allTracks)
 }
 
