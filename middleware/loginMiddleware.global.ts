@@ -3,10 +3,9 @@ import useSpotifyAPI from "~/api/SpotifyAPI";
 import {spotifyToken} from "~/composable/spotifyToken";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    console.log(from.path)
 
     // if you are coming from the '/login' page, no evaluation is needed and the function returns here
-    if (from.path == '/login' || from.path == '/callback/') {
+    if (to.path == '/login' || to.path == '/callback/') {
         return
     }
 
