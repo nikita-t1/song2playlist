@@ -1,6 +1,13 @@
 import axios, {AxiosInstance} from "axios";
 import axiosRetry from "axios-retry";
+
 import CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
+import CurrentPlaybackResponse = SpotifyApi.CurrentPlaybackResponse;
+import PlaylistTrackResponse = SpotifyApi.PlaylistTrackResponse;
+import ListOfCurrentUsersPlaylistsResponse = SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
+import UsersQueueResponse = SpotifyApi.UsersQueueResponse;
+import AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
+import RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
 
 /**
  * SpotifyAPI class for interacting with the Spotify API
@@ -36,7 +43,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/get-information-about-the-users-current-playback
      */
     async getPlaybackState() {
-        return await this.reqInstance.get("https://api.spotify.com/v1/me/player")
+        return await this.reqInstance.get<CurrentPlaybackResponse>("https://api.spotify.com/v1/me/player")
     }
 
     /**
@@ -45,7 +52,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks
      */
     async getPlaylistTracks(url: string) {
-        return await this.reqInstance.get(url + "?limit=50",)
+        return await this.reqInstance.get<PlaylistTrackResponse>(url + "?limit=50",)
     }
 
     /**
@@ -69,7 +76,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/get-a-list-of-current-users-playlists
      */
     async getUserPlaylists(url: string = "https://api.spotify.com/v1/me/playlists?limit=50&offset=0") {
-        return await this.reqInstance.get(url)
+        return await this.reqInstance.get<ListOfCurrentUsersPlaylistsResponse>(url)
     }
 
     /**
@@ -91,7 +98,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/get-queue/
      */
     async getQueue() {
-        return await this.reqInstance.get("https://api.spotify.com/v1/me/player/queue",)
+        return await this.reqInstance.get<UsersQueueResponse>("https://api.spotify.com/v1/me/player/queue",)
     }
 
     /**
@@ -117,7 +124,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist
      */
     async addTrackToPlaylist(playlist_id: string, spotify_uris: any[]) {
-        return await this.reqInstance.post(
+        return await this.reqInstance.post<AddTracksToPlaylistResponse>(
             `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
             {
                 uris: spotify_uris
@@ -179,9 +186,10 @@ class SpotifyAPI {
      * Remove one item from a user's playlist.
      * @param playlist_id The Spotify ID of the playlist
      * @param spotify_uris An array of objects containing Spotify URIs of the tracks or episodes to remove.
+     * https://developer.spotify.com/documentation/web-api/reference/remove-tracks-playlist
      */
     async deletePlaylistItem(playlist_id: string, spotify_uris: any[]) {
-        return await this.reqInstance.delete(
+        return await this.reqInstance.delete<RemoveTracksFromPlaylistResponse>(
             `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
             {
                 data: {

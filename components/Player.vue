@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
         <img
-            :src="[data.album ? data.album.images[0].url : 'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png']"
+            :src="[data?.album ? data.album.images[0].url : 'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png']"
             alt="" class=" rounded-3xl border-spotify-green border">
         <span v-if="data" class="mt-4 text-white font-bold text-center">{{ data.name }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
@@ -44,6 +44,8 @@
 import {useMouseInElement} from "@vueuse/core";
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
+import TrackObjectFull = SpotifyApi.TrackObjectFull;
+import {isTrack} from "~/utils/isTrack";
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI(spotifyStore.spotifyToken)
@@ -58,7 +60,7 @@ let deviceId = ref("")
 let progressMs = ref(0)
 let durationMs = ref(0)
 
-const data = ref({})
+const data = useState<TrackObjectFull | null>()
 
 let interval = 0;
 onMounted(() => {
@@ -71,9 +73,11 @@ onUnmounted(() => {
     clearInterval(interval)
 })
 
-
 function fetchData() {
     api.getPlaybackState().then(res => {
+        // return if the response is not a track
+        if (!isTrack(res.data.item)) return
+
         data.value = res.data.item
         spotifyStore.setPlaybackState(res.data)
         artists.value = res.data.item.artists.map((artist: any) => artist.name).join(', ')
@@ -81,7 +85,7 @@ function fetchData() {
         progressMs.value = res.data.progress_ms ? res.data.progress_ms : 1;
         durationMs.value = res.data.item.duration_ms ? res.data.item.duration_ms : 1;
         playbackPercent.value = progressMs.value / durationMs.value * 100
-        deviceId.value = res.data.device.id
+        deviceId.value = res.data.device.id ?? ""
     }).catch(error => {
         console.log(error)
     });
