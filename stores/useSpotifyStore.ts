@@ -8,11 +8,11 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
     const spotifyToken = useCookie('spotifyToken', {default: () => ""})
     const spotifyRefreshToken = useCookie('spotifyRefreshToken', {default: () => ""})
     const spotifyTokenValidity = useCookie('spotifyTokenValidity', {default: () => 0})
-    let playbackState: CurrentPlaybackResponse | undefined
+    const playbackState = useState<CurrentPlaybackResponse | null>('playbackState', () => null)
     const spotifyUserProfile = useStorage<CurrentUsersProfileResponse | {}>('spotifyUserProfile', {})
 
     function setPlaybackState(state: CurrentPlaybackResponse) {
-        playbackState = state
+        playbackState.value = state
     }
 
     function setSpotifyUserProfile(profile: CurrentUsersProfileResponse) {
