@@ -1,5 +1,6 @@
 import axios, {AxiosInstance} from "axios";
 import axiosRetry from "axios-retry";
+import CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
 
 /**
  * SpotifyAPI class for interacting with the Spotify API
@@ -98,7 +99,7 @@ class SpotifyAPI {
      * https://developer.spotify.com/documentation/web-api/reference/get-current-users-profile/
      */
     async getUserProfile() {
-        return await this.reqInstance.get("https://api.spotify.com/v1/me")
+        return await this.reqInstance.get<CurrentUsersProfileResponse>("https://api.spotify.com/v1/me")
     }
 
     /**

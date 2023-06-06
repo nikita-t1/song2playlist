@@ -50,18 +50,15 @@
 
 <script lang="ts" setup>
 import {ref, Ref} from '@vue/reactivity'
-import {spotifyPlaybackState} from "~/composable/spotifyPlaybackState";
-import {spotifyUserProfile} from "~/composable/spotifyUserProfile";
-
 import {onBeforeMount} from "@vue/runtime-core";
-import {Playlist, Track} from "spotify-types";
-import {spotifyToken} from "~/composable/spotifyToken";
 import useSpotifyAPI from "~/api/SpotifyAPI";
 
-const api = useSpotifyAPI(spotifyToken().value)
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
+const spotifyStore = useSpotifyStore()
+
+const api = useSpotifyAPI(spotifyStore.spotifyToken)
 
 const playlists: Ref<any[]> = ref([])
-const playbackState: Ref<Track> = spotifyPlaybackState()
 const expectedPlaylistsSize= ref(Number.MAX_SAFE_INTEGER)
 const actualPlaylistsSize= ref(0)
 
@@ -70,10 +67,10 @@ onBeforeMount(() => {
 })
 
 function loadAllUserPlaylists(){
-    api.getAllUserPlaylists().then(async (playlists: Playlist[]) => {
+    api.getAllUserPlaylists().then(async (playlists: any[]) => {
 
         // show only user playlists
-        playlists = playlists.filter((value: any) => value.owner.id == spotifyUserProfile().value.id)
+        playlists = playlists.filter((value: any) => value.owner.id == spotifyStore.spotifyUserProfile!!.id)
 
         mapPlaylistImages(playlists)
         expectedPlaylistsSize.value = playlists.length
@@ -88,7 +85,7 @@ function loadAllUserPlaylists(){
 
 function addTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
-    const spotify_uris: any[] = [playbackState.value.uri].flat()
+    const spotify_uris: any[] = [spotifyStore.playbackState?.item?.uri ?? ""].flat()
     api.addTrackToPlaylist(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
@@ -96,7 +93,7 @@ function addTrackToPlaylist(playlist: any){
 
 function removeTrackToPlaylist(playlist: any){
     const playlist_id = playlist.id
-    const spotify_uris: any[] = [playbackState.value.uri].flat()
+    const spotify_uris: any[] = [spotifyStore.playbackState?.item?.uri ?? ""].flat()
     api.deletePlaylistItem(playlist_id, spotify_uris).then(() => {
         loadPlaylistTracks(playlist)
     })
@@ -104,7 +101,7 @@ function removeTrackToPlaylist(playlist: any){
 
 function isCurrentTrackInPlaylist(playlist: any) {
     console.log(playlist.allTracks)
-    return playlist.allTracks.some((it: any) => it.track?.id == spotifyPlaybackState().value.id)
+    return playlist.allTracks.some((it: any) => it.track?.id == spotifyStore.spotifyUserProfile?.id)
 }
 
 

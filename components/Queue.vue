@@ -22,10 +22,10 @@
 <script lang="ts" setup>
 
 import {sleep} from "~/composable/sleep";
-import {spotifyToken} from "~/composable/spotifyToken";
 import useSpotifyAPI from "~/api/SpotifyAPI";
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
 
-const api = useSpotifyAPI(spotifyToken().value)
+const api = useSpotifyAPI(useSpotifyStore().spotifyToken)
 
 let queue = ref({})
 

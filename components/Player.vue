@@ -2,7 +2,7 @@
     <div class="flex flex-col">
         <img
             :src="[data.album ? data.album.images[0].url : 'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png']"
-            alt="" class=" rounded-3xl border-spotify-green border border-2">
+            alt="" class=" rounded-3xl border-spotify-green border">
         <span v-if="data" class="mt-4 text-white font-bold text-center">{{ data.name }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
         <div ref="progressBar" class="cursor-pointer duration-300 flex-none my-4 flex h-2 bg-gray-200 rounded-full"
@@ -42,11 +42,11 @@
 <script lang="ts" setup>
 
 import {useMouseInElement} from "@vueuse/core";
-import {spotifyPlaybackState} from "~/composable/spotifyPlaybackState";
-import {spotifyToken} from "~/composable/spotifyToken";
 import useSpotifyAPI from "~/api/SpotifyAPI";
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
 
-const api = useSpotifyAPI(spotifyToken().value)
+const spotifyStore = useSpotifyStore()
+const api = useSpotifyAPI(spotifyStore.spotifyToken)
 
 const progressBar = ref(null)
 const {x, elementX, elementWidth} = useMouseInElement(progressBar)
@@ -75,7 +75,7 @@ onUnmounted(() => {
 function fetchData() {
     api.getPlaybackState().then(res => {
         data.value = res.data.item
-        spotifyPlaybackState().value = res.data.item
+        spotifyStore.setPlaybackState(res.data)
         artists.value = res.data.item.artists.map((artist: any) => artist.name).join(', ')
         isPlaying.value = res.data.is_playing
         progressMs.value = res.data.progress_ms ? res.data.progress_ms : 1;

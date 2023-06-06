@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts" setup>
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
 
-import {spotifyTokenValidity} from "~/composable/spotifyTokenValidity";
+const spotifyStore = useSpotifyStore()
 
 onMounted(() => {
     checkSpotifyTokenEverySecond()
@@ -15,7 +16,7 @@ const diffInSeconds = ref(0)
 function checkSpotifyTokenEverySecond() {
     const intervalID = setInterval(function () {
         const date = new Date()
-        const expiresIn: Date = new Date(spotifyTokenValidity().value)
+        const expiresIn: Date = new Date(spotifyStore.spotifyTokenValidity)
         diffInSeconds.value = Math.round((expiresIn.getTime() - date.getTime()) / 1000);
     }, 1000)
 }
