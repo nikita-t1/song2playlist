@@ -66,12 +66,10 @@ import useSpotifyAPI from "~/api/SpotifyAPI";
 
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {isUserObject} from "~/utils/isUserObject";
-import {use} from "h3";
-import {isCurrentPlayback} from "~/utils/isCurrentPlayback";
 
 const spotifyStore = useSpotifyStore()
 
-const api = useSpotifyAPI(spotifyStore.spotifyToken)
+const api = useSpotifyAPI()
 
 const playlists: Ref<any[]> = ref([])
 const expectedPlaylistsSize = ref(Number.MAX_SAFE_INTEGER)

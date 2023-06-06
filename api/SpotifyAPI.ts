@@ -8,6 +8,7 @@ import ListOfCurrentUsersPlaylistsResponse = SpotifyApi.ListOfCurrentUsersPlayli
 import UsersQueueResponse = SpotifyApi.UsersQueueResponse;
 import AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
 import RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
 
 /**
  * SpotifyAPI class for interacting with the Spotify API
@@ -200,7 +201,7 @@ class SpotifyAPI {
     }
 }
 
-const useSpotifyAPI = (spotifyToken: string) => {
+const useSpotifyAPI = (spotifyToken: string = useSpotifyStore().spotifyToken) => {
     return new SpotifyAPI(spotifyToken)
 }
 

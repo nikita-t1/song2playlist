@@ -23,9 +23,7 @@
 
 import {sleep} from "~/composable/sleep";
 import useSpotifyAPI from "~/api/SpotifyAPI";
-import {useSpotifyStore} from "~/stores/useSpotifyStore";
-
-const api = useSpotifyAPI(useSpotifyStore().spotifyToken)
+const api = useSpotifyAPI()
 
 let queue = ref({})
 

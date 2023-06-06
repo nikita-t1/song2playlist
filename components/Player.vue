@@ -48,7 +48,7 @@ import TrackObjectFull = SpotifyApi.TrackObjectFull;
 import {isTrack} from "~/utils/isTrack";
 
 const spotifyStore = useSpotifyStore()
-const api = useSpotifyAPI(spotifyStore.spotifyToken)
+const api = useSpotifyAPI()
 
 const progressBar = ref(null)
 const {x, elementX, elementWidth} = useMouseInElement(progressBar)

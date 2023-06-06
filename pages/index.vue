@@ -8,7 +8,7 @@
             <SpotifyTokenValidity class="text-center"/>
         </div>
 
-        <Playlists />
+        <Playlists/>
 
 
     </div>
@@ -17,10 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import Queue from "~/components/Queue.vue";
-import Player from "~/components/Player.vue";
-import SpotifyTokenValidity from "~/components/SpotifyTokenValidity.vue";
-import Playlists from "~/components/Playlists.vue";
+
 </script>
 
 <style scoped>
