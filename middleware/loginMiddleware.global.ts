@@ -1,9 +1,9 @@
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {createPinia} from "pinia";
-const spotifyStore = useSpotifyStore(createPinia())
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+    const spotifyStore = useSpotifyStore(createPinia())
 
     console.log("from: " + from.path)
     console.log("to: " + to.path)
@@ -12,13 +12,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return
     }
 
-    try {
-        await useSpotifyAPI(spotifyStore.spotifyToken).getUserProfile() // <-- will throw a 400 status code if the token is invalid or doesn't exist
-        console.log("valid token")
-        return navigateTo(to)
-    } catch (e) {
+    if (spotifyStore.spotifyTokenValidity < Date.now()) {
         // redirect to '/login'
         return navigateTo('/login')
     }
-
 })

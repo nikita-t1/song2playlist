@@ -54,6 +54,7 @@ import {onBeforeMount} from "@vue/runtime-core";
 import useSpotifyAPI from "~/api/SpotifyAPI";
 
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
+import {isUserObject} from "~/utils/isUserObject";
 const spotifyStore = useSpotifyStore()
 
 const api = useSpotifyAPI(spotifyStore.spotifyToken)
@@ -69,8 +70,12 @@ onBeforeMount(() => {
 function loadAllUserPlaylists(){
     api.getAllUserPlaylists().then(async (playlists: any[]) => {
 
+        const userProfiles = spotifyStore.spotifyUserProfile
+        if (!isUserObject(userProfiles)) return
+
         // show only user playlists
-        playlists = playlists.filter((value: any) => value.owner.id == spotifyStore.spotifyUserProfile!!.id)
+        playlists = playlists.filter((value: any) => value.owner.id == userProfiles.id)
+
 
         mapPlaylistImages(playlists)
         expectedPlaylistsSize.value = playlists.length
