@@ -18,6 +18,34 @@
 
 <script lang="ts" setup>
 
+import {isTrack} from "~/utils/isTrack";
+import {useSpotifyStore} from "~/stores/useSpotifyStore";
+import useSpotifyAPI from "~/api/SpotifyAPI";
+
+const spotifyStore = useSpotifyStore()
+const api = useSpotifyAPI()
+
+let interval = 0;
+onMounted(() => {
+    interval = window.setInterval(() => {
+        fetchPlayback();
+    }, 3000)
+})
+onUnmounted(() => {
+    clearInterval(interval)
+})
+
+function fetchPlayback() {
+    api.getPlaybackState().then(res => {
+        // return if the response is not a track
+        if (!isTrack(res.data.item)) return
+
+        spotifyStore.setPlaybackState(res.data)
+    }).catch(error => {
+        console.log(error)
+    });
+}
+
 </script>
 
 <style scoped>
