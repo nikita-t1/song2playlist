@@ -6,30 +6,7 @@
         <span v-if="data" class="mt-4 text-white font-bold text-center">{{ data.name }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
         <SeekBar />
-        <div class="inline-flex rounded-md shadow-sm w-full">
-            <button class="grow text-white cursor-auto" type="button">
-                    <span
-                        class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"
-                        @click="api.skipToPreviousTrack">
-                        <Icon name="bi:skip-start-fill" size="20"/>
-                    </span>
-            </button>
-            <button class="grow text-white cursor-auto" type="button">
-                    <span
-                        class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"
-                        @click="togglePause">
-                        <Icon v-if="isPlaying" name="bi:pause-fill" size="20"/>
-                        <Icon v-else name="bi:caret-right-fill" size="20"/>
-                    </span>
-            </button>
-            <button class="grow text-white cursor-auto" type="button">
-                    <span
-                        class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"
-                        @click="api.skipToNextTrack">
-                        <Icon name="bi:skip-end-fill" size="20"/>
-                    </span>
-            </button>
-        </div>
+        <PlaybackControls />
     </div>
 </template>
 
@@ -39,13 +16,12 @@ import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import TrackObjectFull = SpotifyApi.TrackObjectFull;
 import {isTrack} from "~/utils/isTrack";
+import PlaybackControls from "~/components/PlaybackControls.vue";
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()
 
 let artists = ref("")
-let isPlaying = ref(false)
-let deviceId = ref("")
 
 const data = useState<TrackObjectFull | null>()
 
@@ -68,22 +44,11 @@ function fetchData() {
         data.value = res.data.item
         spotifyStore.setPlaybackState(res.data)
         artists.value = res.data.item.artists.map((artist: any) => artist.name).join(', ')
-        isPlaying.value = res.data.is_playing
-        deviceId.value = res.data.device.id ?? ""
     }).catch(error => {
         console.log(error)
     });
 }
 
-
-
-function togglePause() {
-    if (isPlaying.value) {
-        api.pausePlayback()
-    } else {
-        api.resumePlayback(deviceId.value)
-    }
-}
 </script>
 
 <style scoped>
