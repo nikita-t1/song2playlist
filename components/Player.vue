@@ -1,12 +1,10 @@
 <template>
     <div class="flex flex-col">
-        <img
-            :src="[data?.album ? data.album.images[0].url : 'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png']"
-            alt="" class=" rounded-3xl border-spotify-green border">
-        <span v-if="data" class="mt-4 text-white font-bold text-center">{{ data.name }}</span>
+        <img :src=imageUrl alt="" class=" rounded-3xl border-spotify-green border">
+        <span class="mt-4 text-white font-bold text-center">{{ title }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
-        <SeekBar />
-        <PlaybackControls />
+        <SeekBar/>
+        <PlaybackControls/>
     </div>
 </template>
 
@@ -14,40 +12,29 @@
 
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
-import TrackObjectFull = SpotifyApi.TrackObjectFull;
 import {isTrack} from "~/utils/isTrack";
-import PlaybackControls from "~/components/PlaybackControls.vue";
+import {storeToRefs} from "pinia";
 
-const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()
+const spotifyStore = useSpotifyStore()
+const {playbackState} = storeToRefs(spotifyStore)
 
-let artists = ref("")
+const fallbackImage = 'https://developer.spotify.com/images/guidelines/design/icon3@2x.png'
 
-const data = useState<TrackObjectFull | null>()
-
-let interval = 0;
-onMounted(() => {
-    interval = window.setInterval(function () {
-        fetchData();
-    }, 3000)
+const title = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
+    return playbackState.value.item.name
 })
 
-onUnmounted(() => {
-    clearInterval(interval)
+const artists = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
+    return playbackState.value.item.artists.map((artist: any) => artist.name).join(', ')
 })
 
-function fetchData() {
-    api.getPlaybackState().then(res => {
-        // return if the response is not a track
-        if (!isTrack(res.data.item)) return
-
-        data.value = res.data.item
-        spotifyStore.setPlaybackState(res.data)
-        artists.value = res.data.item.artists.map((artist: any) => artist.name).join(', ')
-    }).catch(error => {
-        console.log(error)
-    });
-}
+const imageUrl = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return fallbackImage
+    return playbackState.value.item.album.images[0].url
+})
 
 </script>
 
