@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-row h-screen">
 
-        <div class="w-72 min-w-[18rem] bg-black flex flex-col justify-end p-4 border-1 border border-spotify-green ">
-            <Queue class="overflow-hidden overflow-y-scroll mb-4"/>
-            <Player/>
+        <div class="w-72 min-w-[18rem] bg-black flex flex-col justify-end p-3 pt-0 border-1 border border-spotify-green ">
+            <Queue class="mb-4"/>
+            <Player :isFetching="isFetching"/>
             <SpotifyTokenValidity class="text-center"/>
         </div>
 
@@ -34,7 +34,10 @@ onUnmounted(() => {
     clearInterval(interval)
 })
 
+const isFetching = ref(false)
+
 function fetchPlayback() {
+    isFetching.value = true
     api.getPlaybackState().then(res => {
         // return if the response is not a track
         if (!isTrack(res.data.item)) return
@@ -42,6 +45,8 @@ function fetchPlayback() {
         spotifyStore.setPlaybackState(res.data)
     }).catch(error => {
         console.log(error)
+    }).finally(() => {
+        isFetching.value = false
     });
 }
 

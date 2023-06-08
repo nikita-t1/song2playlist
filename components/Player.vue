@@ -1,5 +1,9 @@
 <template>
     <div class="flex flex-col">
+        <div class="flex flex-row items-center justify-between my-2">
+            <span class="text-white font-bold">Player:</span>
+            <LoadingSpinner v-if="isFetching"/>
+        </div>
         <img :src=imageUrl alt="" class=" rounded-3xl border-spotify-green border">
         <span class="mt-4 text-white font-bold text-center">{{ title }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
@@ -18,6 +22,9 @@ import {storeToRefs} from "pinia";
 const api = useSpotifyAPI()
 const spotifyStore = useSpotifyStore()
 const {playbackState} = storeToRefs(spotifyStore)
+
+defineProps<{ isFetching: boolean }>()
+
 
 const fallbackImage = 'https://developer.spotify.com/images/guidelines/design/icon3@2x.png'
 
