@@ -7,14 +7,7 @@
 
         <ul class="flex flex-col">
             <li v-for="(item, index) in queue" :key="index" class="py-3 px-2 text-sm text-white border-b">
-                <div class="inline-flex flex-row items-center">
-                    <img :src="item.album.images.at(0).url" alt=""
-                         class="w-12 rounded border-spotify-green border border-transparent border-1">
-                    <div class="flex flex-col ml-2">
-                        <div class="text-white font-bold">{{ item.name }}</div>
-                        <div class="text-neutral-500">{{ convertArtistsToReadableFormat(item.artists) }}</div>
-                    </div>
-                </div>
+                <QueueItem :track="item"/>
             </li>
         </ul>
     </div>
@@ -25,7 +18,6 @@
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {isTrack} from "~/utils/isTrack";
 import TrackObjectFull = SpotifyApi.TrackObjectFull;
-import ArtistObjectSimplified = SpotifyApi.ArtistObjectSimplified;
 import {Ref} from "vue";
 
 const isFetching = ref(false)
@@ -51,12 +43,4 @@ function fetchQueue() {
     });
 }
 
-function convertArtistsToReadableFormat(artists: Array<ArtistObjectSimplified>) {
-    return artists.map((artist: ArtistObjectSimplified) => artist.name).join(', ')
-}
-
 </script>
-
-<style scoped>
-
-</style>
