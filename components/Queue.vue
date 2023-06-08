@@ -1,11 +1,10 @@
 <template>
-    <div>
-        <div class="flex flex-row items-center justify-between me-2">
-            <span class="text-white font-bold">Queue:</span>
-            <LoadingSpinner v-if="isFetching"/>
-        </div>
-
-        <ul class="flex flex-col">
+    <div class="flex flex-row items-center justify-between my-2">
+        <span class="text-white font-bold">Queue:</span>
+        <LoadingSpinner v-if="isFetching"/>
+    </div>
+    <div class="h-full overflow-auto overflow-y-scroll">
+        <ul class="flex flex-col h-fit">
             <li v-for="(item, index) in queue" :key="index" class="py-3 px-2 text-sm text-white border-b">
                 <QueueItem :track="item"/>
             </li>
