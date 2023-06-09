@@ -33,10 +33,11 @@ onUnmounted(() => {
 function fetchQueue() {
     isFetching.value = true
     useSpotifyAPI().getQueue().then(res => {
+        if (res.data.queue.length === 0) return
         queue.value = res.data.queue.filter(item => isTrack(item)) as TrackObjectFull[]
     }).catch(err => {
         console.log(err)
-        queue.value = null
+        queue.value = []
     }).finally(() => {
         isFetching.value = false
     });
