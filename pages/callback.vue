@@ -1,10 +1,6 @@
 <template>
     <div class="flex flex-col justify-center items-center h-screen bg-spotify-black">
-        <div
-            aria-label="loading"
-            class="m-4 animate-spin inline-block w-24 h-24 border-[6px] border-current border-t-transparent text-spotify-green rounded-full" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
+        <LoadingSpinner size="lg" />
         <div class="text-white">
             Getting Access Token from Spotify
         </div>

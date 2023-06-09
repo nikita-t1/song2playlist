@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row items-center justify-between my-2">
         <span class="text-white font-bold">Queue:</span>
-        <LoadingSpinner v-if="isFetching"/>
+        <LoadingSpinner v-if="isFetching" size="sm"/>
     </div>
     <div class="h-full overflow-auto overflow-y-scroll">
         <ul class="flex flex-col h-fit">

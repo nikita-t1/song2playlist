@@ -2,7 +2,7 @@
     <div class="flex flex-col">
         <div class="flex flex-row items-center justify-between my-2">
             <span class="text-white font-bold">Player:</span>
-            <LoadingSpinner v-if="isFetching"/>
+            <LoadingSpinner v-if="isFetching" size="sm"/>
         </div>
         <img :src=imageUrl alt="" class=" rounded-3xl border-spotify-green border">
         <span class="mt-4 text-white font-bold text-center">{{ title }}</span>
