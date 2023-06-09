@@ -24,34 +24,10 @@
         <div v-else class="flex flex-wrap justify-start justify-items-center justify-self-center space-y-4 space-x-5">
 
             <div></div>
-            <div v-for="(val, index) in playlists" :key="index" class="w-48 items-center relative rounded">
+            <div v-for="(playlist, index) in playlists" :key="index" class="w-48 items-center relative rounded">
 
-                <div v-if="val.tracks" class="absolute">
-                    <div v-if="isCurrentTrackInPlaylist(val)" @click.capture="removeTrackToPlaylist(val)">
-                        <div
-                            class="cursor-pointer w-8 h-8 bg-emerald-500 -m-2 text-center rounded-lg rounded-br-lg text-white hover:bg-red-500 group duration-500 ">
-                            <Icon class="text-white group-hover:!hidden duration-500" name="bi:check-lg"
-                                  size="24"></Icon>
-                            <Icon class="!hidden group-hover:!inline-flex duration-500" name="bi:x" size="24"></Icon>
-                        </div>
-                    </div>
-                    <div v-else @click.capture="addTrackToPlaylist(val)">
-                        <div
-                            class="cursor-pointer w-8 h-8 bg-blue-500 -m-2 text-center rounded-lg rounded-br-lg text-white">
-                            <Icon class="text-white" name="bi:plus" size="24"></Icon>
-                        </div>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="w-8 h-8 bg-red-500 absolute -m-2 text-center rounded-lg rounded-br-lg text-white">
-                        <Icon name="bi:check-lg" size="24"></Icon>
-                    </div>
-                </div>
-                <img v-if="val"
-                     :class="{'outline outline-4 outline-spotify-green outline-offset-4': isCurrentTrackInPlaylist(val)}"
-                     :src="val.images[0].url" alt=""
-                     class="h-48 w-48 object-cover rounded duration-1000">
-                <div class="mt-1 text-center text-white whitespace-normal">{{ val.name }}</div>
+                <PlaylistCard :playlist="playlist" @reloadPlaylistTracks="loadPlaylistTracks(playlist)" />
+
             </div>
 
         </div>
@@ -99,31 +75,6 @@ function loadAllUserPlaylists() {
         }
     })
 }
-
-function addTrackToPlaylist(playlist: any) {
-    const playlist_id = playlist.id
-    const spotify_uris: any[] = [spotifyStore.playbackState?.item?.uri ?? ""].flat()
-    api.addTrackToPlaylist(playlist_id, spotify_uris).then(() => {
-        loadPlaylistTracks(playlist)
-    })
-}
-
-function removeTrackToPlaylist(playlist: any) {
-    const playlist_id = playlist.id
-    const spotify_uris: any[] = [spotifyStore.playbackState?.item?.uri ?? ""].flat()
-    api.deletePlaylistItem(playlist_id, spotify_uris).then(() => {
-        loadPlaylistTracks(playlist)
-    })
-}
-
-function isCurrentTrackInPlaylist(playlist: any) {
-    const playback = spotifyStore.playbackState
-    // check if the value is null,undefined,0,false,"",or NaN
-    if (!playback) return []
-
-    return playlist.allTracks.some((it: any) => it.track?.id == playback.item!.id)
-}
-
 
 function mapPlaylistImages(pl: any[]) {
     playlists.value = pl.map((element: any) => {

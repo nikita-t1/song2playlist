@@ -124,7 +124,7 @@ class SpotifyAPI {
      * @param spotify_uris A comma-separated list of Spotify URIs to add.
      * https://developer.spotify.com/documentation/web-api/reference/add-tracks-to-playlist
      */
-    async addTrackToPlaylist(playlist_id: string, spotify_uris: any[]) {
+    async addTrackToPlaylist(playlist_id: string, spotify_uris: string[]) {
         return await this.reqInstance.post<AddTracksToPlaylistResponse>(
             `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
             {
@@ -189,7 +189,7 @@ class SpotifyAPI {
      * @param spotify_uris An array of objects containing Spotify URIs of the tracks or episodes to remove.
      * https://developer.spotify.com/documentation/web-api/reference/remove-tracks-playlist
      */
-    async deletePlaylistItem(playlist_id: string, spotify_uris: any[]) {
+    async deletePlaylistItem(playlist_id: string, spotify_uris: string[]) {
         return await this.reqInstance.delete<RemoveTracksFromPlaylistResponse>(
             `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
             {
