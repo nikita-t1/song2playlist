@@ -8,7 +8,8 @@ import ListOfCurrentUsersPlaylistsResponse = SpotifyApi.ListOfCurrentUsersPlayli
 import UsersQueueResponse = SpotifyApi.UsersQueueResponse;
 import AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
 import RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
-import {useSpotifyStore} from "~/stores/useSpotifyStore";
+import {useAuthorizationStore} from "~/stores/useAuthorizationStore";
+import {Store} from "pinia";
 
 /**
  * SpotifyAPI class for interacting with the Spotify API
@@ -201,7 +202,19 @@ class SpotifyAPI {
     }
 }
 
-const useSpotifyAPI = (spotifyToken: string = useSpotifyStore().spotifyToken) => {
+export async function getSpotifyAccessToken(body: Object) {
+    return await axios.post(
+        "https://accounts.spotify.com/api/token",
+        body,
+        {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        }
+    )
+}
+
+const useSpotifyAPI = (spotifyToken: string = useAuthorizationStore().spotifyAccessToken) => {
     return new SpotifyAPI(spotifyToken)
 }
 

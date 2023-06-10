@@ -1,9 +1,10 @@
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {createPinia} from "pinia";
+import {useAuthorizationStore} from "~/stores/useAuthorizationStore";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    const spotifyStore = useSpotifyStore(createPinia())
+    const authStore = useAuthorizationStore(createPinia())
 
     console.log("from: " + from.path)
     console.log("to: " + to.path)
@@ -12,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         return
     }
 
-    if (spotifyStore.spotifyTokenValidity < Date.now()) {
+    if (authStore.spotifyTokenValidity < Date.now()) {
         // redirect to '/login'
         return navigateTo('/login')
     }

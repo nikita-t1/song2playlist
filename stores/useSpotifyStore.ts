@@ -5,9 +5,6 @@ import {StorageSerializers, useStorage} from "@vueuse/core";
 import {Ref} from "vue";
 
 export const useSpotifyStore = defineStore('spotifyStore', () => {
-    const spotifyToken = useCookie('spotifyToken', {default: () => ""})
-    const spotifyRefreshToken = useCookie('spotifyRefreshToken', {default: () => ""})
-    const spotifyTokenValidity = useCookie('spotifyTokenValidity', {default: () => 0})
     const playbackState = useState<CurrentPlaybackResponse | null>('playbackState', () => null)
     const spotifyUserProfile = useStorage<CurrentUsersProfileResponse | {}>('spotifyUserProfile', {})
 
@@ -21,9 +18,6 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
 
     return {
         playbackState,
-        spotifyToken,
-        spotifyRefreshToken,
-        spotifyTokenValidity,
         spotifyUserProfile: skipHydrate(spotifyUserProfile), // https://pinia.vuejs.org/cookbook/composables.html#ssr
         setPlaybackState,
         setSpotifyUserProfile
