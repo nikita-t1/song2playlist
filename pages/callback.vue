@@ -27,7 +27,6 @@ const authArgs = computed(() => {
         redirect_uri: authStore.callbackUrl ?? '',
         client_id: authStore.clientId ?? '',
         code_verifier: authStore.codeVerifier ?? '',
-        refresh_token: authStore.spotifyRefreshToken ?? '',
     }
 });
 
