@@ -7,6 +7,7 @@
         <img :src=imageUrl alt="" class=" rounded-3xl border-spotify-green border">
         <span class="mt-4 text-white font-bold text-center">{{ title }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
+        <span class="text-neutral-600 text-center text-sm">{{ id }}</span>
         <SeekBar/>
         <PlaybackControls/>
     </div>
@@ -36,6 +37,11 @@ const title = computed(() => {
 const artists = computed(() => {
     if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
     return playbackState.value.item.artists.map((artist: any) => artist.name).join(', ')
+})
+
+const id = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
+    return playbackState.value.item.id
 })
 
 const imageUrl = computed(() => {
