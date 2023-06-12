@@ -1,5 +1,6 @@
 <template>
     <div class="grow bg-spotify-black overflow-y-scroll pb-12">
+
         <div class="flex justify-end items-center m-4">
             <button class="bg-emerald-500 rounded p-2 px-4 mx-4 justify-center text-center" type="button"
                     @click.capture="reloadPlaylists">
@@ -7,22 +8,14 @@
                 <Icon class="ml-2" name="bi:arrow-repeat" size="20"/>
             </button>
         </div>
-        <div v-if="actualPlaylistsSize < expectedPlaylistsSize"
-             class="flex flex-wrap justify-center justify-items-center justify-self-center text-white">
-            <div class="flex flex-col justify-center items-center h-screen bg-spotify-black">
-                <LoadingSpinner class="m-4" size="lg"/>
-                <div class="text-white">
-                    {{ actualPlaylistsSize }}/{{ expectedPlaylistsSize }}
-                </div>
-            </div>
+
+        <div v-if="loading" class="flex flex-col justify-center items-center h-screen">
+            <LoadingSpinner size="lg"/>
         </div>
-        <div v-else class="flex flex-wrap justify-start justify-items-center justify-self-center space-y-4 space-x-5">
 
-            <div></div>
-            <div v-for="(playlist, index) in playlists" :key="index" class="w-48 items-center relative rounded">
-
-                <PlaylistCard :playlist="playlist" @reloadPlaylistTracks="loadPlaylistTracks(playlist)" />
-
+        <div v-else class="flex flex-wrap justify-evenly m-2 gap-y-4 gap-x-5">
+            <div v-for="(playlist, index) in filteredPlaylists" :key="index" class="w-48 items-center relative rounded">
+                <PlaylistCard :playlist="playlist" />
             </div>
 
         </div>
@@ -31,68 +24,51 @@
 
 
 <script lang="ts" setup>
-import {ref, Ref} from '@vue/reactivity'
-import {onBeforeMount} from "@vue/runtime-core";
-import useSpotifyAPI from "~/api/SpotifyAPI";
+import { ref, provide } from 'vue'
 
+import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
-import {isUserObject} from "~/utils/isUserObject";
+import DevButton from "~/components/DevButton.vue";
+import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
+import {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
+import {storeToRefs} from "pinia";
+
+const loading = ref(false)
 
 const spotifyStore = useSpotifyStore()
-
 const api = useSpotifyAPI()
 
-const playlists: Ref<any[]> = ref([])
-const expectedPlaylistsSize = ref(Number.MAX_SAFE_INTEGER)
-const actualPlaylistsSize = ref(0)
+const {playlists} = storeToRefs(spotifyStore)
+const playlistsChanged = ref(false)
+watch(playlists, () => {
+    playlistsChanged.value = true
+    setTimeout(() => playlistsChanged.value = false, 1000)
+}, {deep: true})
 
-onBeforeMount(() => {
-    loadAllUserPlaylists()
+onMounted(() => fetchPlaylists())
+
+const filteredPlaylists = computed(() => {
+    return playlists.value.filter((value: Playlist) => value.owner.id == (spotifyStore.spotifyUserProfile?.id ?? ''))
 })
 
-function loadAllUserPlaylists() {
-    api.getAllUserPlaylists().then(async (playlists: any[]) => {
-
-        const userProfiles = spotifyStore.spotifyUserProfile
-        if (!isUserObject(userProfiles)) return
-
-        // show only user playlists
-        playlists = playlists.filter((value: any) => value.owner.id == userProfiles.id)
-
-
-        mapPlaylistImages(playlists)
-        expectedPlaylistsSize.value = playlists.length
-        for (const playlist of playlists) {
-            loadPlaylistTracks(playlist).then(value => {
-                actualPlaylistsSize.value = actualPlaylistsSize.value + 1
-            })
-            // await sleep(1000)
-        }
+provide('fetchPlaylists', fetchPlaylists)
+function fetchPlaylists() {
+    loading.value = true
+    api.getAllUserPlaylists().then(async (pos: PlaylistObjectSimplified[]) => {
+        const poswt = pos as Playlist[]
+        // for (const playlist of poswt) {
+        //     // await spotifyStore.fetchPlaylistTracksAsync(api, playlist)
+        //     spotifyStore.fetchPlaylistTracks(api, playlist)
+        // }
+        spotifyStore.setPlaylists(poswt)
+    }).finally(() => {
+        loading.value = false
     })
 }
 
-function mapPlaylistImages(pl: any[]) {
-    playlists.value = pl.map((element: any) => {
-        if (element.images[0] == undefined) {
-            element.images[0] = {"url": "https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png"}
-        }
-        return element
-    })
-}
-
-async function loadPlaylistTracks(playlist: any) { //PlaylistObjectFull
-    playlist.allTracks = await api.getAllPlaylistTracks(playlist.tracks.href);
-    console.log(playlist.allTracks)
-
-}
-
-function reloadPlaylists() {
-    actualPlaylistsSize.value = 0
-    loadAllUserPlaylists()
-}
+// async function fetchPlaylistTracks(playlist: Playlist) {
+//     playlist.allTracks = await api.getAllPlaylistTracks(playlist.tracks.href);
+// }
 
 </script>
 
-<style scoped>
-
-</style>

@@ -11,30 +11,39 @@ const api = useSpotifyAPI()
 const {playbackState} = storeToRefs(spotifyStore)
 
 const props = defineProps<{ playlist: Playlist }>()
-const emit = defineEmits(['reloadPlaylistTracks'])
 
 const playlist_id = props.playlist.id
 
 const spotify_uris = computed(() => [spotifyStore.playbackState?.item?.uri ?? ""].flat())
 
+const image = computed(() => {
+    if (!props.playlist) return ""
+    if (!props.playlist.images) return ""
+    return props.playlist.images[0]?.url ?? ""
+})
+
 const isCurrentTrackInPlaylist = computed(() => {
     const pbs = playbackState.value
     if (!pbs) return false
     // compare the current track id with the playlist tracks
-    return props.playlist.allTracks.some((it: PlaylistTrackObject) => it.track?.id == pbs.item!.id)
+    return props.playlist?.allTracks?.some((it: PlaylistTrackObject) => it.track?.id == pbs.item!.id) ?? false
+})
+
+onMounted(() => {
+    spotifyStore.fetchPlaylistTracks(api, props.playlist)
 })
 
 function addTrackToPlaylist() {
     api.addTrackToPlaylist(playlist_id, spotify_uris.value)
         .finally(() => {
-            emit('reloadPlaylistTracks')
+            spotifyStore.fetchPlaylistTracksAsync(api, props.playlist)
         })
 }
 
 function removeTrackToPlaylist() {
     api.deletePlaylistItem(playlist_id, spotify_uris.value)
         .finally(() => {
-            emit('reloadPlaylistTracks')
+            spotifyStore.fetchPlaylistTracksAsync(api, props.playlist)
         })
 }
 
@@ -55,7 +64,7 @@ const hover = ref(false)
 
         <img v-if="playlist"
              :class="{'outline outline-4 outline-spotify-green outline-offset-4': isCurrentTrackInPlaylist}"
-             :src="playlist.images[0].url" alt="Playlist Image"
+             :src="image" alt="Playlist Image"
              class="h-48 w-48 rounded duration-300 group-hover:outline-none">
         <div class="mt-1 text-center text-white">{{ playlist.name }}</div>
     </div>

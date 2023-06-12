@@ -11,7 +11,7 @@
 
 import {PropType} from "@vue/runtime-core";
 
-type Sizes = "sm"| "md"| "lg"
+type SpinnerSizes = "sm"| "md"| "lg"
 
 const selectedSize = computed(() => {
     if (props.size == "sm") return "w-4 h-4"
@@ -22,7 +22,7 @@ const selectedSize = computed(() => {
 const props = defineProps({
     size: {
         required: false,
-        type: Object as PropType<Sizes>,
+        type: String as PropType<SpinnerSizes>,
         default: "md"
     }
 })
