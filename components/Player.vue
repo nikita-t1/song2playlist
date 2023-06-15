@@ -7,7 +7,9 @@
         <img :src=imageUrl alt="" class=" rounded-3xl border-spotify-green border">
         <span class="mt-4 text-white font-bold text-center">{{ title }}</span>
         <span class="text-neutral-500 text-center">{{ artists }}</span>
-        <span class="text-neutral-600 text-center text-sm">{{ id }}</span>
+        <span class="text-neutral-600 text-center text-sm">ID: {{ id }}</span>
+        <span class="text-neutral-600 text-center text-sm">Release Year: {{ year }}</span>
+        <span class="text-neutral-600 text-center text-sm">Popularity: {{ popularity }}</span>
         <SeekBar/>
         <PlaybackControls/>
     </div>
@@ -39,15 +41,26 @@ const artists = computed(() => {
     return playbackState.value.item.artists.map((artist: any) => artist.name).join(', ')
 })
 
+const imageUrl = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return fallbackImage
+    return playbackState.value.item.album.images[0].url
+})
+
 const id = computed(() => {
     if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
     return playbackState.value.item.id
 })
 
-const imageUrl = computed(() => {
-    if (!playbackState.value || !isTrack(playbackState.value.item)) return fallbackImage
-    return playbackState.value.item.album.images[0].url
+const year = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
+    return playbackState.value.item.album.release_date.split('-')[0]
 })
+
+const popularity = computed(() => {
+    if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
+    return playbackState.value.item.popularity
+})
+
 
 </script>
 
