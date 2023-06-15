@@ -14,31 +14,18 @@ import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
 export interface ISpotifyAPI {
     getPlaybackState(): Promise<AxiosResponse<CurrentPlaybackResponse>>
-
     getPlaylistTracks(url: string): Promise<AxiosResponse<PlaylistTrackResponse>>
-
     getAllPlaylistTracks(url: string): Promise<PlaylistTrackObject[]>
-
     getUserPlaylists(url: string): Promise<AxiosResponse<ListOfCurrentUsersPlaylistsResponse>>
-
     getAllUserPlaylists(): Promise<PlaylistObjectSimplified[]>
-
     getQueue(): Promise<AxiosResponse<UsersQueueResponse>>
-
     getUserProfile(): Promise<AxiosResponse<CurrentUsersProfileResponse>>
-
     skipToNextTrack(): Promise<AxiosResponse<void>>
-
     addTrackToPlaylist(playlistId: string, uris: string[]): Promise<AxiosResponse<AddTracksToPlaylistResponse>>
-
     skipToPreviousTrack(): Promise<AxiosResponse<void>>
-
     pausePlayback(): Promise<AxiosResponse<void>>
-
     resumePlayback(device_id: string): Promise<AxiosResponse<void>>
-
     setSeekPosition(positionMs: number): Promise<AxiosResponse<void>>
-
     deletePlaylistItem(playlist_id: string, spotify_uris: string[]): Promise<AxiosResponse<RemoveTracksFromPlaylistResponse>>
 }
 
