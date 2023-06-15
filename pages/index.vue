@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row h-screen">
+    <div class="flex flex-row h-screen bg-spotify-black">
 
         <div
             class="w-72 min-w-[18rem] bg-black flex flex-col justify-end p-3 pt-0 border-1 border border-spotify-green ">
@@ -7,11 +7,8 @@
             <Player :isFetching="isFetchingPlayback"/>
             <SpotifyTokenValidity class="text-center"/>
         </div>
-        <div class="flex flex-col w-full">
-            <div class="flex justify-end items-center p-4 bg-spotify-black ">
-                <LoadingSpinner v-if="playlistsChanged" size="md" class="mx-4"/>
-                <Header />
-            </div>
+        <div class="flex flex-col w-full ">
+            <Header class="p-4" />
             <Playlists :loading="isFetchingPlaylists"/>
         </div>
 
@@ -30,13 +27,6 @@ import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()
-
-const {playlists} = storeToRefs(spotifyStore)
-const playlistsChanged = ref(false)
-watch(playlists, () => {
-    playlistsChanged.value = true
-    setTimeout(() => playlistsChanged.value = false, 1000)
-}, {deep: true})
 
 let interval = 0;
 onMounted(() => {

@@ -2,7 +2,7 @@
     <div
         aria-label="loading"
         :class=selectedSize
-        class="animate-spin inline-block border-[3px] border-current border-t-transparent text-spotify-green rounded-full" role="status">
+        class="animate-spin inline-block border-[3px] border-current text-spotify-green aspect-square rounded-full border-t-transparent" role="status">
         <span class="sr-only">Loading...</span>
     </div>
 </template>
