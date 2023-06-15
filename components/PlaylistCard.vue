@@ -36,14 +36,14 @@ onMounted(() => {
 function addTrackToPlaylist() {
     api.addTrackToPlaylist(playlist_id, spotify_uris.value)
         .finally(() => {
-            spotifyStore.fetchPlaylistTracksAsync(api, props.playlist)
+            spotifyStore.fetchPlaylistTracks(api, props.playlist)
         })
 }
 
 function removeTrackToPlaylist() {
     api.deletePlaylistItem(playlist_id, spotify_uris.value)
         .finally(() => {
-            spotifyStore.fetchPlaylistTracksAsync(api, props.playlist)
+            spotifyStore.fetchPlaylistTracks(api, props.playlist)
         })
 }
 
