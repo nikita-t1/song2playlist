@@ -2,6 +2,8 @@
 import useGenerateRandomString from "~/composable/useGenerateRandomString";
 import useGenerateCodeChallenge from "~/composable/useGenerateCodeChallenge";
 import {useAuthorizationStore} from "~/stores/useAuthorizationStore";
+import {initFlowbite} from "flowbite";
+import ClientIdCreationPopover from "~/components/ClientIdCreationPopover.vue";
 
 const authStore = useAuthorizationStore()
 
@@ -11,6 +13,7 @@ const authUrl = computed(() => ('https://accounts.spotify.com/authorize?' + auth
 const callbackUrl = ref('');
 
 onMounted(async () => {
+    initFlowbite();
     authStore.setCodeVerifier(codeVerifier)
     codeChallenge.value = await useGenerateCodeChallenge(codeVerifier)
     callbackUrl.value = window.location.href.replace('login', 'callback') + "/"
@@ -45,11 +48,20 @@ const scopes: string = `
 <template>
     <div class="w-full max-w-md">
         <h1 class="font-bold text-xl text-white pb-4">Get started</h1>
-        <p class="text-gray-400 pb-6">
+        <div class="text-gray-400 pb-6">
             Input your
-            <Keyboard text="Client_ID"/>
+<!--            <Keyboard text="Client_ID" data-popover-target="popover-default"/>-->
+
+            <button data-popover-target="popover-default" type="button">
+                <Keyboard text="Client_ID"/>
+            </button>
+            <div data-popover id="popover-default" role="tooltip" class="absolute z-10 invisible inline-block w-[28rem] text-sm transition-opacity duration-300 border rounded-lg shadow-sm opacity-0 text-gray-400 border-gray-600 bg-neutral-800">
+                <ClientIdCreationPopover :callback-url="callbackUrl"/>
+                <div data-popper-arrow></div>
+            </div>
+
             from your Spotify Developer Account to get started.
-        </p>
+        </div>
         <div class="my-6">
             <label class="font-semibold block text-sm  mb-2 dark:text-white" for="input-label">Client_ID</label>
             <input id="input-label" v-model="authStore.clientId"
