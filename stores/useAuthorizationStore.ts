@@ -7,9 +7,9 @@ export const useAuthorizationStore = defineStore('authorizationStore', () => {
     const codeVerifier: Ref<string | null> = useStorage('codeVerifier', null)
     const callbackUrl: Ref<string | null> = useStorage('callbackUrl', null)
 
-    const spotifyAccessToken = useCookie('spotifyToken', {default: () => ""})
-    const spotifyRefreshToken = useCookie('spotifyRefreshToken', {default: () => ""})
-    const spotifyTokenValidity = useCookie('spotifyTokenValidity', {default: () => 0})
+    const spotifyAccessToken = useStorage<string>('spotifyToken', '')
+    const spotifyRefreshToken = useStorage<string>('spotifyRefreshToken', '')
+    const spotifyTokenValidity = useStorage<number>('spotifyTokenValidity', 0)
 
     function setClientId(newClientId: string) {
         clientId.value = newClientId
