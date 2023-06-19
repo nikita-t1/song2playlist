@@ -26,7 +26,7 @@ const queue: Ref<TrackObjectFull[] | null> = ref(null)
 
 let interval = 0;
 onMounted(() => {
-    interval = window.setInterval(() => fetchQueue(), 5000)
+    interval = window.setInterval(() => fetchQueue(), 3000)
 })
 onUnmounted(() => {
     clearInterval(interval)

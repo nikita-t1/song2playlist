@@ -31,7 +31,7 @@ const api = useSpotifyAPI()
 let interval = 0;
 onMounted(() => {
     fetchPlaylists()
-    interval = window.setInterval(fetchPlayback, 3000)
+    interval = window.setInterval(fetchPlayback, 1000)
 })
 onUnmounted(() => {
     clearInterval(interval)
