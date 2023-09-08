@@ -11,17 +11,17 @@ You have to
 
 Wouldn't it be great to be able to instantly see which playlists a track is part of and quickly add/remove the track from a playlist
 
+## ClientID
+To use the Spotify API you need to register your app and get a ClientID.
+You can do this [here](https://developer.spotify.com/dashboard/applications).
+
 ## Development Server
 
 Make sure to install the dependencies:
 ```bash
 npm install
 ```
-Provide the following Environment Variables, which you can get trough [Spotify](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/)
-```dotenv
-CLIENT_ID=
-CLIENT_SECRET=
-```
+
 Start the development server on http://localhost:3000
 
 ```bash
