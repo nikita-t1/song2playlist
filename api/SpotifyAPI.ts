@@ -11,6 +11,8 @@ import AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
 import RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
 import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
 import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+import AlbumObjectFull = SpotifyApi.AlbumObjectFull;
+import ArtistObjectFull = SpotifyApi.ArtistObjectFull;
 
 export interface ISpotifyAPI {
     getPlaybackState(): Promise<AxiosResponse<CurrentPlaybackResponse>>
@@ -222,6 +224,27 @@ class SpotifyAPI implements ISpotifyAPI {
                 }
             }
         )
+    }
+
+    /**
+     * Get album by its ID.
+     *
+     * @param {string} albumId - The ID of the album to retrieve.
+     * @return {AlbumObjectFull} The album object with the given ID.
+     */
+    getAlbum(albumId: string): Promise<AxiosResponse<AlbumObjectFull>> {
+        return this.reqInstance.get(`https://api.spotify.com/v1/albums/${albumId}`)
+    }
+
+    /**
+     * Retrieves the list of artists from the provided map.
+     *
+     * @param {string[]} map - The map containing artist data.
+     * @return {ArtistObjectFull} - This function does not return any value.
+     */
+    getArtists(map: string[]): Promise<AxiosResponse<{artists: ArtistObjectFull[]}>> {
+        return this.reqInstance.get(`https://api.spotify.com/v1/artists?ids=${map.join(',')}`)
+
     }
 }
 
