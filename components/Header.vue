@@ -11,6 +11,8 @@ const api = useSpotifyAPI()
 const {playlists} = storeToRefs(spotifyStore)
 
 const fetchPlaylists = inject('fetchPlaylists') as () => void
+const setViewHiddenPlaylists = inject('setViewHiddenPlaylists') as () => void
+const props = defineProps<{ showHidden: Boolean }>()
 
 const playlistsChanged = ref(false)
 watch(playlists, () => {
@@ -34,6 +36,7 @@ const profileImg = computed(() => {
             <LoadingSpinner v-if="playlistsChanged" size="md" class="mx-4"/>
         </div>
         <div class="flex space-x-3">
+            <IconButton :name="[showHidden ? 'ph:eye-slash' : 'ph:eye-light'].join('')" tooltip="show hidden playlists" size="20" :action="setViewHiddenPlaylists"/>
             <IconButton name="ph:arrows-clockwise-bold" tooltip="reload playlists" size="20" :action="fetchPlaylists"/>
             <img class="rounded-full outline outline-2 outline-green-500 w-10 h10" :src="profileImg" alt="profile picture">
         </div>

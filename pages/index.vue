@@ -8,8 +8,8 @@
             <SpotifyTokenValidity class="text-center"/>
         </div>
         <div class="flex flex-col w-full ">
-            <Header class="p-4" />
-            <Playlists :loading="isFetchingPlaylists"/>
+            <Header class="p-4" :showHidden="viewHiddenPlaylists" />
+            <Playlists :loading="isFetchingPlaylists" :showHidden="viewHiddenPlaylists"/>
         </div>
 
     </div>
@@ -20,9 +20,8 @@
 import {isTrack} from "~/utils/isTrack";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import useSpotifyAPI from "~/api/SpotifyAPI";
-import {storeToRefs} from "pinia";
 import {provide, ref} from "vue";
-import {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
+import {PlaylistObjectSimplifiedWithTrack} from "~/types/PlaylistObjectSimplifiedWithTrack";
 import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
 
 const spotifyStore = useSpotifyStore()
@@ -64,7 +63,7 @@ function fetchPlayback() {
 function fetchPlaylists() {
     isFetchingPlaylists.value = true
     api.getAllUserPlaylists().then((pos: PlaylistObjectSimplified[]) => {
-        spotifyStore.setPlaylists(pos as Playlist[])
+        spotifyStore.setPlaylists(pos as PlaylistObjectSimplifiedWithTrack[])
     }).finally(() => {
         isFetchingPlaylists.value = false
     })
@@ -76,5 +75,12 @@ function fetchUserProfile() {
         spotifyStore.setSpotifyUserProfile(userProfile.data)
     })
 }
+
+const viewHiddenPlaylists = ref(false)
+function setViewHiddenPlaylists(){
+    viewHiddenPlaylists.value = !viewHiddenPlaylists.value
+    return viewHiddenPlaylists.value
+}
+provide('setViewHiddenPlaylists', setViewHiddenPlaylists)
 
 </script>

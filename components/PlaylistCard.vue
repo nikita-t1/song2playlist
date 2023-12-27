@@ -61,10 +61,26 @@ function removeTrackToPlaylist() {
 // change the icon when hovering
 const hover = ref(false)
 
+const emit = defineEmits(['hideThis'])
+const hide = () => emit('hideThis', props.playlist)
+
+const menu = ref();
+const items = ref([
+    {
+        label: 'Hide', icon: 'ph:eye-slash', command: () => {
+            hide()
+        }
+    },
+]);
+
+const onImageRightClick = (event: any) => {
+    menu.value.show(event);
+};
+
 </script>
 
 <template>
-    <div class="group">
+    <div class="group duration-500">
         <div
             :class="{ 'bg-emerald-500 hover:bg-red-500': isCurrentTrackInPlaylist != TrackMatch.NONE, 'bg-blue-500': isCurrentTrackInPlaylist == TrackMatch.NONE, 'bg-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}"
             class="cursor-pointer w-8 h-8 absolute -m-2 text-center rounded-lg rounded-br-lg text-white duration-500"
@@ -74,10 +90,26 @@ const hover = ref(false)
             <Icon v-else name="bi:plus" size="24" @click="addTrackToPlaylist"/>
         </div>
 
-        <img v-if="playlist"
-             :class="{'outline outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}"
-             :src="image" alt="Playlist Image"
-             class="h-48 w-48 rounded duration-300 group-hover:outline-none">
+        <img v-if="playlist" :class="{'outline outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}" :src="image"
+             alt="Playlist Image"
+             aria-haspopup="true" class="h-48 w-48 rounded duration-300 group-hover:outline-none"
+             @contextmenu="onImageRightClick">
         <div class="mt-1 text-center text-white">{{ playlist.name }}</div>
+        <ContextMenu ref="menu" :model="items" class="bg-spotify-black border border-spotify-green rounded-lg">
+            <template #item="{ item, props }">
+                <a v-ripple
+                   class="flex items-center hover:bg-spotify-green-darkest duration-100 py-2 px-8 m-2 rounded-lg text-white"
+                   v-bind="props.action">
+                    <Icon :name="item.icon" :size="'20'" class="text-white"/>
+                    <span class="ml-2">{{ item.label }}</span>
+                    <Badge v-if="item.badge" :value="item.badge" class="ml-auto"/>
+                    <span v-if="item.shortcut"
+                          class="ml-auto border border-surface-200 dark:border-surface-700 rounded surface-100 text-xs p-1">{{
+                            item.shortcut
+                        }}</span>
+                    <i v-if="item.items" class="pi pi-angle-right ml-auto text-primary"></i>
+                </a>
+            </template>
+        </ContextMenu>
     </div>
 </template>
