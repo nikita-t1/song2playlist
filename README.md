@@ -11,6 +11,13 @@ You have to
 
 Wouldn't it be great to be able to instantly see which playlists a track is part of and quickly add/remove the track from a playlist
 
+![song2playlist](screenshot.png)
+
+## Features
+- [x] Add a Track to a Playlist
+- [x] Remove a Track from a Playlist
+- [x] Show if a Track is part of a Playlist
+
 ## ClientID
 To use the Spotify API you need to register your app and get a ClientID.
 You can do this [here](https://developer.spotify.com/dashboard/applications).
