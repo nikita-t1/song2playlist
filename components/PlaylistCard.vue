@@ -71,6 +71,26 @@ const items = ref([
             hide()
         }
     },
+    {
+        label: 'Reload', icon: 'ph:arrows-clockwise-bold', command: () => {
+            spotifyStore.fetchPlaylistTracks(api, props.playlist)
+        }
+    },
+    {
+        label: 'Add to Playlist', icon: 'ph:plus', command: () => {
+            addTrackToPlaylist()
+        }
+    },
+    {
+        label: 'Remove from Playlist', icon: 'ph:minus', command: () => {
+            removeTrackToPlaylist()
+        }
+    },
+    {
+        label: 'Open in Spotify', icon: 'ph:spotify-logo', command: () => {
+            window.open(props.playlist.external_urls.spotify, '_blank')
+        }
+    },
 ]);
 
 const onImageRightClick = (event: any) => {
@@ -95,19 +115,13 @@ const onImageRightClick = (event: any) => {
              aria-haspopup="true" class="h-48 w-48 rounded duration-300 group-hover:outline-none"
              @contextmenu="onImageRightClick">
         <div class="mt-1 text-center text-white">{{ playlist.name }}</div>
-        <ContextMenu ref="menu" :model="items" class="bg-spotify-black border border-spotify-green rounded-lg">
+        <ContextMenu ref="menu" :model="items" class="bg-spotify-black shadow-2xl border-2 border-spotify-green rounded-lg">
             <template #item="{ item, props }">
-                <a v-ripple
-                   class="flex items-center hover:bg-spotify-green-darkest duration-100 py-2 px-8 m-2 rounded-lg text-white"
+                <a
+                   class="flex hover:bg-spotify-green-darkest duration-100 py-2 px-4 pr-8 m-2 rounded-lg text-white"
                    v-bind="props.action">
                     <Icon :name="item.icon" :size="'20'" class="text-white"/>
-                    <span class="ml-2">{{ item.label }}</span>
-                    <Badge v-if="item.badge" :value="item.badge" class="ml-auto"/>
-                    <span v-if="item.shortcut"
-                          class="ml-auto border border-surface-200 dark:border-surface-700 rounded surface-100 text-xs p-1">{{
-                            item.shortcut
-                        }}</span>
-                    <i v-if="item.items" class="pi pi-angle-right ml-auto text-primary"></i>
+                    <span class="ml-4 grow">{{ item.label }}</span>
                 </a>
             </template>
         </ContextMenu>
