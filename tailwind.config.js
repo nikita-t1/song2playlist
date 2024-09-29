@@ -7,8 +7,6 @@ module.exports = {
         "./plugins/**/*.{js,ts}",
         "./nuxt.config.{js,ts}",
         "./app.vue",
-        'node_modules/preline/dist/*.js',
-        "./node_modules/flowbite.{js,ts}"
     ],
     theme: {
         extend: {
@@ -22,7 +20,4 @@ module.exports = {
             },
         },
     },
-    plugins: [
-        require('preline/plugin', 'flowbite/plugin'),
-    ],
 }
