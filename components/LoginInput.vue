@@ -2,7 +2,6 @@
 import useGenerateRandomString from "~/composable/useGenerateRandomString";
 import useGenerateCodeChallenge from "~/composable/useGenerateCodeChallenge";
 import {useAuthorizationStore} from "~/stores/useAuthorizationStore";
-import {initFlowbite} from "flowbite";
 import ClientIdCreationPopover from "~/components/ClientIdCreationPopover.vue";
 
 const authStore = useAuthorizationStore()
@@ -13,7 +12,6 @@ const authUrl = computed(() => ('https://accounts.spotify.com/authorize?' + auth
 const callbackUrl = ref('');
 
 onMounted(async () => {
-    initFlowbite();
     authStore.setCodeVerifier(codeVerifier)
     codeChallenge.value = await useGenerateCodeChallenge(codeVerifier)
     callbackUrl.value = window.location.href.replace('login', 'callback') + "/"
