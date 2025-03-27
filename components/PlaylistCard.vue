@@ -22,6 +22,22 @@ const image = computed(() => {
     return props.playlist.images[0]?.url ?? ""
 })
 
+const topFiveTracks = computed(() => {
+    const top =  props.playlist?.allTracks?.slice(0, 5) ?? []
+    // alert(JSON.stringify(top))
+    if (!top) return []
+    return top.map((it: PlaylistTrackObject) => {
+        return {
+            added_at: it.added_at,
+            name: it.track?.name,
+            category: it.track?.album?.name,
+            quantity: it.track?.artists?.map((it) => it.name).join(", ")
+        }
+    })
+})
+
+const topFiveTracksCollapsed = ref(false)
+
 enum TrackMatch {
     ID,
     NAME,
@@ -101,6 +117,8 @@ const onImageRightClick = (event: any) => {
 
 <template>
     <div class="group duration-500">
+
+        <!-- Add/Remove track from playlist button -->
         <div
             :class="{ 'bg-emerald-500 hover:bg-red-500': isCurrentTrackInPlaylist != TrackMatch.NONE, 'bg-blue-500': isCurrentTrackInPlaylist == TrackMatch.NONE, 'bg-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}"
             class="cursor-pointer w-8 h-8 absolute -m-2 text-center rounded-lg rounded-br-lg text-white duration-500"
@@ -110,11 +128,28 @@ const onImageRightClick = (event: any) => {
             <Icon v-else name="bi:plus" size="24" @click="addTrackToPlaylist"/>
         </div>
 
+        <!-- Playlist Image -->
         <img v-if="playlist" :class="{'outline outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}" :src="image"
              alt="Playlist Image"
              aria-haspopup="true" class="h-48 w-48 rounded duration-300 group-hover:outline-none"
              @contextmenu="onImageRightClick">
-        <div class="mt-1 text-center text-white">{{ playlist.name }}</div>
+
+        <!-- Playlist Name -->
+<!--        <div class="mt-1 text-center text-white">{{ playlist.name }}</div>-->
+        <Panel @update:collapsed="value => topFiveTracksCollapsed = value" :collapsed="true" :header="playlist.name" toggleable class="mt-2 text-center text-white " label="Button">
+            <DataTable :value="topFiveTracks" class="m-1 outline outline-1 p-1 outline-spotify-green rounded truncate text-start">
+                <Column field="name" class=""></Column>
+<!--                <Column field="name" header="Name"></Column>-->
+<!--                <Column field="category" header="Category"></Column>-->
+<!--                <Column field="quantity" header="Quantity"></Column>-->
+            </DataTable>
+<!--            <p class="m-0">-->
+<!--                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.-->
+<!--                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.-->
+<!--            </p>-->
+        </Panel>
+
+        <!-- Context Menu -->
         <ContextMenu ref="menu" :model="items" class="bg-spotify-black shadow-2xl border-2 border-spotify-green rounded-lg">
             <template #item="{ item, props }">
                 <a
