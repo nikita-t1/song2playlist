@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {useStorage} from "@vueuse/core";
-import {Ref} from "vue";
+import {type Ref} from "vue";
 
 export const useAuthorizationStore = defineStore('authorizationStore', () => {
     const clientId: Ref<string | null> = useStorage('clientId', null)

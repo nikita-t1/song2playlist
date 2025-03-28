@@ -1,5 +1,5 @@
-import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+type PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
+type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
 export interface PlaylistObjectSimplifiedWithTrack extends PlaylistObjectSimplified {
     allTracks: PlaylistTrackObject[]

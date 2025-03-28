@@ -2,8 +2,9 @@
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {storeToRefs} from "pinia";
-import {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+import type {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
+type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+import Panel from '~/volt/Panel.vue';
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()
@@ -131,13 +132,13 @@ const onImageRightClick = (event: any) => {
         <!-- Playlist Image -->
         <img v-if="playlist" :class="{'outline outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}" :src="image"
              alt="Playlist Image"
-             aria-haspopup="true" class="h-48 w-48 rounded duration-300 group-hover:outline-none"
+             aria-haspopup="true" class="h-48 w-48 rounded-sm duration-300 group-hover:outline-hidden"
              @contextmenu="onImageRightClick">
 
         <!-- Playlist Name -->
 <!--        <div class="mt-1 text-center text-white">{{ playlist.name }}</div>-->
         <Panel @update:collapsed="value => topFiveTracksCollapsed = value" :collapsed="true" :header="playlist.name" toggleable class="mt-2 text-center text-white " label="Button">
-            <DataTable :value="topFiveTracks" class="m-1 outline outline-1 p-1 outline-spotify-green rounded truncate text-start">
+            <DataTable :value="topFiveTracks" class="m-1 outline outline-1 p-1 outline-spotify-green rounded-sm truncate text-start">
                 <Column field="name" class=""></Column>
 <!--                <Column field="name" header="Name"></Column>-->
 <!--                <Column field="category" header="Category"></Column>-->

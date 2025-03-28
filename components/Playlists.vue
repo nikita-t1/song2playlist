@@ -3,10 +3,10 @@
 
         <div class="flex flex-wrap justify-evenly m-2 gap-y-4 gap-x-5">
             <div v-for="(playlist, index) in hiddenPlaylists" :class="showHidden ? '' : 'hidden'" :key="playlist.id"
-                 class="w-48 items-center relative rounded">
+                 class="w-48 items-center relative rounded-sm">
                 <PlaylistCard :key="playlist.id" :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
             </div>
-            <div v-for="(playlist, index) in unhiddenPlaylists" :class="showHidden ? 'hidden' : ''" :key="playlist.id" class="w-48 items-center relative rounded">
+            <div v-for="(playlist, index) in unhiddenPlaylists" :class="showHidden ? 'hidden' : ''" :key="playlist.id" class="w-48 items-center relative rounded-sm">
                 <PlaylistCard :key="playlist.id" :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
             </div>
 
@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
-import {
+import type {
     PlaylistObjectSimplifiedWithTrack,
     PlaylistObjectSimplifiedWithTrack as Playlist
 } from "~/types/PlaylistObjectSimplifiedWithTrack";

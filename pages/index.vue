@@ -21,8 +21,8 @@ import {isTrack} from "~/utils/isTrack";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {provide, ref} from "vue";
-import {PlaylistObjectSimplifiedWithTrack} from "~/types/PlaylistObjectSimplifiedWithTrack";
-import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
+import type {PlaylistObjectSimplifiedWithTrack} from "~/types/PlaylistObjectSimplifiedWithTrack";
+type PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()

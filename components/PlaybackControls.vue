@@ -18,7 +18,7 @@ function togglePause() {
 </script>
 
 <template>
-    <div class="inline-flex rounded-md shadow-sm w-full">
+    <div class="inline-flex rounded-md shadow-xs w-full">
         <button class="grow text-white cursor-auto" type="button">
                     <span
                         class="inline-flex justify-center items-center w-[46px] h-[46px] rounded-full bg-green-100 text-green-500 cursor-pointer"

@@ -53,7 +53,7 @@ const scopes: string = `
             <button data-popover-target="popover-default" type="button">
                 <Keyboard text="Client_ID"/>
             </button>
-            <div data-popover id="popover-default" role="tooltip" class="absolute z-10 invisible inline-block w-[28rem] text-sm transition-opacity duration-300 border rounded-lg shadow-sm opacity-0 text-gray-400 border-gray-600 bg-neutral-800">
+            <div data-popover id="popover-default" role="tooltip" class="absolute z-10 invisible inline-block w-[28rem] text-sm transition-opacity duration-300 border rounded-lg shadow-xs opacity-0 text-gray-400 border-gray-600 bg-neutral-800">
                 <ClientIdCreationPopover :callback-url="callbackUrl"/>
                 <div data-popper-arrow></div>
             </div>

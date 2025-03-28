@@ -1,10 +1,10 @@
 import {defineStore, skipHydrate} from "pinia";
 import {useStorage} from "@vueuse/core";
-import {PlaylistObjectSimplifiedWithTrack} from "~/types/PlaylistObjectSimplifiedWithTrack";
-import {ISpotifyAPI} from "~/api/SpotifyAPI";
-import CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
-import CurrentPlaybackResponse = SpotifyApi.CurrentPlaybackResponse;
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+import {type PlaylistObjectSimplifiedWithTrack} from "~/types/PlaylistObjectSimplifiedWithTrack";
+import {type ISpotifyAPI} from "~/api/SpotifyAPI";
+type CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
+type CurrentPlaybackResponse = SpotifyApi.CurrentPlaybackResponse;
+type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
 export const useSpotifyStore = defineStore('spotifyStore', () => {
     const playbackState = useState<CurrentPlaybackResponse | null>('playbackState', () => null)

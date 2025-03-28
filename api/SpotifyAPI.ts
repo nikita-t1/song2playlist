@@ -1,18 +1,18 @@
-import axios, {AxiosInstance, AxiosResponse} from "axios";
+import axios, { type AxiosInstance, type AxiosResponse} from "axios";
 import axiosRetry from "axios-retry";
 import {useAuthorizationStore} from "~/stores/useAuthorizationStore";
 
-import CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
-import CurrentPlaybackResponse = SpotifyApi.CurrentPlaybackResponse;
-import PlaylistTrackResponse = SpotifyApi.PlaylistTrackResponse;
-import ListOfCurrentUsersPlaylistsResponse = SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
-import UsersQueueResponse = SpotifyApi.UsersQueueResponse;
-import AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
-import RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
-import PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
-import PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
-import AlbumObjectFull = SpotifyApi.AlbumObjectFull;
-import ArtistObjectFull = SpotifyApi.ArtistObjectFull;
+type CurrentUsersProfileResponse = SpotifyApi.CurrentUsersProfileResponse;
+type CurrentPlaybackResponse = SpotifyApi.CurrentPlaybackResponse;
+type PlaylistTrackResponse = SpotifyApi.PlaylistTrackResponse;
+type ListOfCurrentUsersPlaylistsResponse = SpotifyApi.ListOfCurrentUsersPlaylistsResponse;
+type UsersQueueResponse = SpotifyApi.UsersQueueResponse;
+type AddTracksToPlaylistResponse = SpotifyApi.AddTracksToPlaylistResponse;
+type RemoveTracksFromPlaylistResponse = SpotifyApi.RemoveTracksFromPlaylistResponse;
+type PlaylistObjectSimplified = SpotifyApi.PlaylistObjectSimplified;
+type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
+type AlbumObjectFull = SpotifyApi.AlbumObjectFull;
+type ArtistObjectFull = SpotifyApi.ArtistObjectFull;
 
 export interface ISpotifyAPI {
     getPlaybackState(): Promise<AxiosResponse<CurrentPlaybackResponse>>

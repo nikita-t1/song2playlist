@@ -18,8 +18,8 @@
 
 import useSpotifyAPI from "~/api/SpotifyAPI";
 import {isTrack} from "~/utils/isTrack";
-import TrackObjectFull = SpotifyApi.TrackObjectFull;
-import {Ref} from "vue";
+type TrackObjectFull = SpotifyApi.TrackObjectFull;
+import {type Ref} from "vue";
 
 const isFetching = ref(false)
 const queue: Ref<TrackObjectFull[] | null> = ref(null)

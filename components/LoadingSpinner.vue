@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 
-import {PropType} from "@vue/runtime-core";
+import {type PropType} from "@vue/runtime-core";
 
 type SpinnerSizes = "sm"| "md"| "lg"
 
