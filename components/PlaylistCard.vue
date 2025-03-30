@@ -3,8 +3,8 @@ import useSpotifyAPI from "~/api/SpotifyAPI";
 import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {storeToRefs} from "pinia";
 import type {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
+import ContextMenu from "~/components/common/ContextMenu.vue";
 type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
-import Panel from '~/volt/Panel.vue';
 
 const spotifyStore = useSpotifyStore()
 const api = useSpotifyAPI()
@@ -81,6 +81,8 @@ const hover = ref(false)
 const emit = defineEmits(['hideThis'])
 const hide = () => emit('hideThis', props.playlist)
 
+const imageEl = useTemplateRef('imageEl');
+// const { x, y, top, right, bottom, left, width, height } = useElementBounding(imageEl)
 const menu = ref();
 const items = ref([
     {
@@ -111,7 +113,9 @@ const items = ref([
 ]);
 
 const onImageRightClick = (event: any) => {
-    menu.value.show(event);
+    console.log(event)
+    event.preventDefault();
+    // menu.value.openMenu(0, 0);
 };
 
 </script>
@@ -120,46 +124,52 @@ const onImageRightClick = (event: any) => {
     <div class="group duration-500">
 
         <!-- Add/Remove track from playlist button -->
-        <div
-            :class="{ 'bg-emerald-500 hover:bg-red-500': isCurrentTrackInPlaylist != TrackMatch.NONE, 'bg-blue-500': isCurrentTrackInPlaylist == TrackMatch.NONE, 'bg-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}"
-            class="cursor-pointer w-8 h-8 absolute -m-2 text-center rounded-lg rounded-br-lg text-white duration-500"
-            @mouseleave="hover = false" @mouseover="hover = true">
-            <Icon v-if="isCurrentTrackInPlaylist != TrackMatch.NONE" :name="hover ? 'bi:x' : 'bi:check-lg'" size="24"
-                  @click="removeTrackToPlaylist"/>
-            <Icon v-else name="bi:plus" size="24" @click="addTrackToPlaylist"/>
-        </div>
 
-        <!-- Playlist Image -->
-        <img v-if="playlist" :class="{'outline outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}" :src="image"
-             alt="Playlist Image"
-             aria-haspopup="true" class="h-48 w-48 rounded-sm duration-300 group-hover:outline-hidden"
-             @contextmenu="onImageRightClick">
 
-        <!-- Playlist Name -->
-<!--        <div class="mt-1 text-center text-white">{{ playlist.name }}</div>-->
-        <Panel @update:collapsed="value => topFiveTracksCollapsed = value" :collapsed="true" :header="playlist.name" toggleable class="mt-2 text-center text-white " label="Button">
-            <DataTable :value="topFiveTracks" class="m-1 outline outline-1 p-1 outline-spotify-green rounded-sm truncate text-start">
-                <Column field="name" class=""></Column>
-<!--                <Column field="name" header="Name"></Column>-->
-<!--                <Column field="category" header="Category"></Column>-->
-<!--                <Column field="quantity" header="Quantity"></Column>-->
-            </DataTable>
-<!--            <p class="m-0">-->
-<!--                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.-->
-<!--                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.-->
-<!--            </p>-->
-        </Panel>
+<!--        &lt;!&ndash; Playlist Name &ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="mt-1 text-center text-white">{{ playlist.name }}</div>&ndash;&gt;-->
+<!--        <Panel @update:collapsed="value => topFiveTracksCollapsed = value" :collapsed="true" :header="playlist.name" toggleable class="mt-2 text-center text-white " label="Button">-->
+<!--            <DataTable :value="topFiveTracks" class="m-1 outline outline-1 p-1 outline-spotify-green rounded-sm truncate text-start">-->
+<!--                <Column field="name" class=""></Column>-->
+<!--&lt;!&ndash;                <Column field="name" header="Name"></Column>&ndash;&gt;-->
+<!--&lt;!&ndash;                <Column field="category" header="Category"></Column>&ndash;&gt;-->
+<!--&lt;!&ndash;                <Column field="quantity" header="Quantity"></Column>&ndash;&gt;-->
+<!--            </DataTable>-->
+<!--&lt;!&ndash;            <p class="m-0">&ndash;&gt;-->
+<!--&lt;!&ndash;                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
+<!--&lt;!&ndash;                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&ndash;&gt;-->
+<!--&lt;!&ndash;            </p>&ndash;&gt;-->
+<!--        </Panel>-->
 
         <!-- Context Menu -->
-        <ContextMenu ref="menu" :model="items" class="bg-spotify-black shadow-2xl border-2 border-spotify-green rounded-lg">
-            <template #item="{ item, props }">
-                <a
-                   class="flex hover:bg-spotify-green-darkest duration-100 py-2 px-4 pr-8 m-2 rounded-lg text-white"
-                   v-bind="props.action">
-                    <Icon :name="item.icon" :size="'20'" class="text-white"/>
-                    <span class="ml-4 grow">{{ item.label }}</span>
-                </a>
-            </template>
+<!--        <ContextMenu ref="menu" :model="items" class="bg-spotify-black shadow-2xl border-2 border-spotify-green rounded-lg">-->
+<!--            <template #item="{ item, props }">-->
+<!--                <a-->
+<!--                   class="flex hover:bg-spotify-green-darkest duration-100 py-2 px-4 pr-8 m-2 rounded-lg text-white"-->
+<!--                   v-bind="props.action">-->
+<!--                    <Icon :name="item.icon" :size="'20'" class="text-white"/>-->
+<!--                    <span class="ml-4 grow">{{ item.label }}</span>-->
+<!--                </a>-->
+<!--            </template>-->
+<!--        </ContextMenu>-->
+
+        <!-- Simple Context Menu -->
+        <ContextMenu :items="items" :id="playlist_id" class="">
+            <div
+                :class="{ 'bg-emerald-500 hover:bg-red-500': isCurrentTrackInPlaylist != TrackMatch.NONE, 'bg-blue-500': isCurrentTrackInPlaylist == TrackMatch.NONE, 'bg-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}"
+                class="cursor-pointer w-8 h-8 absolute -m-2 text-center rounded-lg rounded-br-lg text-white duration-500"
+                @mouseleave="hover = false" @mouseover="hover = true">
+                <Icon v-if="isCurrentTrackInPlaylist != TrackMatch.NONE" :name="hover ? 'bi:x' : 'bi:check-lg'" size="24"
+                      @click="removeTrackToPlaylist"/>
+                <Icon v-else name="bi:plus" size="24" @click="addTrackToPlaylist"/>
+            </div>
+
+            <!-- Playlist Image -->
+            <img v-if="playlist" :class="{'outline-4 outline-offset-4': isCurrentTrackInPlaylist != TrackMatch.NONE, 'outline-spotify-green': isCurrentTrackInPlaylist == TrackMatch.ID, 'outline-spotify-green-darkest' : isCurrentTrackInPlaylist == TrackMatch.NAME}" :src="image"
+                 alt="Playlist Image"
+                 ref="imageEl"
+                 aria-haspopup="true" class="h-48 w-48 rounded-sm duration-300 group-hover:outline-hidden">
         </ContextMenu>
+
     </div>
 </template>
