@@ -24,9 +24,6 @@
     "axios-retry": "^4.5.0",
     "nuxt-icons": "^3.2.1",
     "pinia": "^3.0.1",
-    "primevue": "^4.3.3",
-    "spotify-types": "^1.0.7",
-    "tailwind-merge": "^3.0.2",
-    "tailwindcss-primeui": "^0.6.1"
+    "spotify-types": "^1.0.7"
   }
 }
