@@ -11,6 +11,8 @@
             <Header class="p-4" :showHidden="viewHiddenPlaylists" />
             <Playlists :loading="isFetchingPlaylists" :showHidden="viewHiddenPlaylists"/>
         </div>
+        <PlaylistSongsSidebar />
+
 
     </div>
 </template>
