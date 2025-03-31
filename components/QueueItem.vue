@@ -12,11 +12,11 @@ function convertArtistsToReadableFormat(artists: Array<ArtistObjectSimplified>) 
 
 <template>
     <div class="inline-flex flex-row items-center">
-        <img :src="track.album.images.at(0).url" alt=""
-             class="w-12 rounded-sm border-spotify-green border border-transparent border-1">
+        <img :src="track.album.images.at(0)?.url || ''" alt=""
+             class="w-12 rounded-sm  border-transparent border-1">
         <div class="flex flex-col ml-2">
-            <div class="text-white font-bold">{{ track.name }}</div>
-            <div class="text-neutral-500">{{ convertArtistsToReadableFormat(track.artists) }}</div>
+            <div class="text-neutral-300">{{ track.name }}</div>
+            <div class="text-neutral-600">{{ convertArtistsToReadableFormat(track.artists) }}</div>
         </div>
     </div>
 </template>

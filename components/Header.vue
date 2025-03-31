@@ -29,7 +29,7 @@ const profileImg = computed(() => {
 <template>
     <div class="flex flex-row w-full justify-between">
         <div class="flex">
-            <div class="flex gap-2 items-center outline outline-1 p-1 outline-green-500 rounded-lg">
+            <div class="flex gap-2 items-center  outline-1 p-1 outline-green-500 rounded-lg">
                 <img class="w-6 h-6" src="/song2playlist_light.ico" alt="brand icon">
                 <span class="text-2xl font-bold text-white font-mono">song2playlist</span>
             </div>
@@ -38,7 +38,7 @@ const profileImg = computed(() => {
         <div class="flex space-x-3">
             <IconButton :name="[showHidden ? 'ph:eye-slash' : 'ph:eye-light'].join('')" tooltip="show hidden playlists" size="20" :action="setViewHiddenPlaylists"/>
             <IconButton name="ph:arrows-clockwise-bold" tooltip="reload playlists" size="20" :action="fetchPlaylists"/>
-            <img class="rounded-full outline outline-2 outline-green-500 w-10 h10" :src="profileImg" alt="profile picture">
+            <img class="rounded-full  outline-2 outline-green-500 w-10 h10" :src="profileImg" alt="profile picture">
         </div>
 
     </div>

@@ -6,7 +6,7 @@
         </div>
         <div class="overflow-y-auto">
             <ul class="flex flex-col">
-                <li v-for="(item, index) in queue" :key="index" class="py-3 px-2 text-sm text-white border-b">
+                <li v-for="(item, index) in queue" :key="index" class="py-1.5 px-2 text-sm text-white">
                     <QueueItem :track="item"/>
                 </li>
             </ul>
