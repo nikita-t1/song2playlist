@@ -33,7 +33,7 @@ defineProps<{ isFetching: boolean }>()
 
 const albumGenres = ref()
 const artistsGenres = ref()
-const fallbackImage = 'https://developer.spotify.com/images/guidelines/design/icon3@2x.png'
+const fallbackImage = 'https://developer-assets.spotifycdn.com/images/guidelines/design/icon4.svg'
 
 const title = computed(() => {
     if (!playbackState.value || !isTrack(playbackState.value.item)) return ''
