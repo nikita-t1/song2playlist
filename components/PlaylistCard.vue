@@ -4,7 +4,6 @@ import {useSpotifyStore} from "~/stores/useSpotifyStore";
 import {storeToRefs} from "pinia";
 import type {PlaylistObjectSimplifiedWithTrack as Playlist} from "~/types/PlaylistObjectSimplifiedWithTrack";
 import ContextMenu from "~/components/common/ContextMenu.vue";
-import Dropdown from "~/components/common/Dropdown.vue";
 import {usePlaylistSidebarStore} from "~/stores/usePlaylistSidebarStore";
 type PlaylistTrackObject = SpotifyApi.PlaylistTrackObject;
 
