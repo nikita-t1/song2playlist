@@ -9,21 +9,21 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/icon": "^1.11.0",
-    "@vueuse/core": "^13.0.0",
-    "@vueuse/nuxt": "^13.0.0",
-    "autoprefixer": "^10.4.21",
-    "nuxt": "^3.16.1",
-    "tailwindcss": "^4.0.17"
+    "@nuxt/icon": "^2.2.1",
+    "@vueuse/core": "^14.3.0",
+    "@vueuse/nuxt": "^14.3.0",
+    "autoprefixer": "^10.5.0",
+    "nuxt": "^4.4.4",
+    "tailwindcss": "^4.2.4"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.10.1",
-    "@tailwindcss/vite": "^4.0.17",
-    "@types/spotify-api": "^0.0.25",
-    "axios": "^1.8.4",
+    "@pinia/nuxt": "^0.11.3",
+    "@tailwindcss/vite": "^4.2.4",
+    "@types/spotify-api": "^0.0.26",
+    "axios": "^1.15.2",
     "axios-retry": "^4.5.0",
-    "nuxt-icons": "^3.2.1",
-    "pinia": "^3.0.1",
+    "nuxt-icons": "^4.0.0",
+    "pinia": "^3.0.4",
     "spotify-types": "^1.0.7"
   }
 }
