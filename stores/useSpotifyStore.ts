@@ -34,18 +34,24 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
         })
     }
 
+    const playlistTrackIds = useState<Record<string, Set<string>>>('playlistTrackIds', () => ({}))
+    const playlistTrackNames = useState<Record<string, Set<string>>>('playlistTrackNames', () => ({}))
+
     function setAllTracks(playlist: PlaylistObjectSimplifiedWithTrack, tracks: PlaylistTrackObject[]) {
         const storedPlaylist = playlists.value.find((p) => p.id === playlist.id)!
         storedPlaylist.allTracks = tracks
-        // const copy = [...playlists.value]
-        // copy.find((p) => p.id === playlist.id)!.allTracks = tracks
-        // playlists.value = copy
+        
+        // Update fast lookup sets
+        playlistTrackIds.value[playlist.id] = new Set(tracks.map(t => t.track?.id).filter((id): id is string => !!id))
+        playlistTrackNames.value[playlist.id] = new Set(tracks.map(t => t.track?.name).filter((name): name is string => !!name))
     }
 
     return {
         playbackState,
         spotifyUserProfile: skipHydrate(spotifyUserProfile), // https://pinia.vuejs.org/cookbook/composables.html#ssr
         playlists,
+        playlistTrackIds,
+        playlistTrackNames,
         setPlaybackState,
         setSpotifyUserProfile,
         setPlaylists,

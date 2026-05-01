@@ -2,14 +2,18 @@
     <div class="grow bg-spotify-black overflow-y-scroll pb-12">
 
         <div class="flex flex-wrap justify-evenly m-2 gap-y-4 gap-x-5">
-            <div v-for="(playlist, index) in hiddenPlaylists" :class="showHidden ? '' : 'hidden'" :key="playlist.id"
-                 class="w-48 items-center relative rounded-sm">
-                <PlaylistCard :key="playlist.id" :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
-            </div>
-            <div v-for="(playlist, index) in unhiddenPlaylists" :class="showHidden ? 'hidden' : ''" :key="playlist.id" class="w-48 items-center relative rounded-sm">
-                <PlaylistCard :key="playlist.id" :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
-            </div>
-
+            <template v-if="showHidden">
+                <div v-for="playlist in hiddenPlaylists" :key="playlist.id"
+                     class="w-48 items-center relative rounded-sm">
+                    <PlaylistCard :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
+                </div>
+            </template>
+            <template v-else>
+                <div v-for="playlist in unhiddenPlaylists" :key="playlist.id"
+                     class="w-48 items-center relative rounded-sm">
+                    <PlaylistCard :playlist="playlist" @hideThis="toggleHiddenPlaylist"/>
+                </div>
+            </template>
         </div>
     </div>
 </template>

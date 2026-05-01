@@ -12,7 +12,7 @@ const api = useSpotifyAPI()
 
 const sidebar = usePlaylistSidebarStore();
 
-const {playbackState} = storeToRefs(spotifyStore)
+const {playbackState, playlistTrackIds, playlistTrackNames} = storeToRefs(spotifyStore)
 
 const props = defineProps<{ playlist: Playlist }>()
 
@@ -40,8 +40,6 @@ const image = computed(() => {
 //     })
 // })
 
-const topFiveTracksCollapsed = ref(false)
-
 enum TrackMatch {
     ID,
     NAME,
@@ -50,13 +48,19 @@ enum TrackMatch {
 
 const isCurrentTrackInPlaylist = computed(() => {
     const pbs = playbackState.value
-    if (!pbs) return TrackMatch.NONE
-    // compare the current track id with the playlist tracks
-    const matchedTrackId = props.playlist?.allTracks?.some((it: PlaylistTrackObject) => it.track?.id == pbs.item!.id) ?? false
-    if (matchedTrackId) return TrackMatch.ID
-    // compare the current track name with the playlist tracks
-    const matchedTrackName = props.playlist?.allTracks?.some((it: PlaylistTrackObject) => it.track?.name == pbs.item!.name) ?? false
-    if (matchedTrackName) return TrackMatch.NAME
+    if (!pbs || !pbs.item) return TrackMatch.NONE
+
+    const trackId = pbs.item.id
+    const trackName = pbs.item.name
+
+    if (playlistTrackIds.value[playlist_id]?.has(trackId)) {
+        return TrackMatch.ID
+    }
+
+    if (playlistTrackNames.value[playlist_id]?.has(trackName)) {
+        return TrackMatch.NAME
+    }
+
     return TrackMatch.NONE
 })
 
