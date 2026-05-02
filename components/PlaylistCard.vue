@@ -64,9 +64,9 @@ const isCurrentTrackInPlaylist = computed(() => {
     return TrackMatch.NONE
 })
 
-onMounted(() => {
-    spotifyStore.fetchPlaylistTracks(api, props.playlist)
-})
+// onMounted(() => {
+//     spotifyStore.fetchPlaylistTracks(api, props.playlist)
+// })
 
 function addTrackToPlaylist() {
     api.addTrackToPlaylist(playlist_id, spotify_uris.value)

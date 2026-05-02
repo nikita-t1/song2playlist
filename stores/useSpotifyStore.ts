@@ -11,6 +11,13 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
     const spotifyUserProfile = useStorage<CurrentUsersProfileResponse | null>('spotifyUserProfile', null)
     const playlists = useState<PlaylistObjectSimplifiedWithTrack[]>('playlists', () => [])
 
+    const loadingProgress = ref({
+        total: 0,
+        current: 0,
+        message: '',
+        playlistNames: [] as string[],
+    })
+
     function setPlaybackState(state: CurrentPlaybackResponse) {
         playbackState.value = state
     }
@@ -21,6 +28,10 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
 
     function setPlaylists(newPlaylists: PlaylistObjectSimplifiedWithTrack[]) {
         playlists.value = newPlaylists
+    }
+
+    function updateLoadingProgress(current: number, total: number, message: string, playlistNames: string[] = []) {
+        loadingProgress.value = { current, total, message, playlistNames }
     }
 
     async function fetchPlaylistTracksAsync(api: ISpotifyAPI, playlist: PlaylistObjectSimplifiedWithTrack) {
@@ -40,7 +51,7 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
     function setAllTracks(playlist: PlaylistObjectSimplifiedWithTrack, tracks: PlaylistTrackObject[]) {
         const storedPlaylist = playlists.value.find((p) => p.id === playlist.id)!
         storedPlaylist.allTracks = tracks
-        
+
         // Update fast lookup sets
         playlistTrackIds.value[playlist.id] = new Set(tracks.map(t => t.track?.id).filter((id): id is string => !!id))
         playlistTrackNames.value[playlist.id] = new Set(tracks.map(t => t.track?.name).filter((name): name is string => !!name))
@@ -52,9 +63,11 @@ export const useSpotifyStore = defineStore('spotifyStore', () => {
         playlists,
         playlistTrackIds,
         playlistTrackNames,
+        loadingProgress,
         setPlaybackState,
         setSpotifyUserProfile,
         setPlaylists,
+        updateLoadingProgress,
         fetchPlaylistTracksAsync,
         fetchPlaylistTracks
     }
